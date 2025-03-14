@@ -3,13 +3,24 @@ class AdminPage{
         //var buttonLoadCSV  = createButton('Load CSV');
         this.socket = socket;
         this.currentQuota = 0;
+        this.currentPlayer = "Gosens";
+        this.currentSquadra = "Ata";
+        this.currentSquadraVincente = "Jeff";
+
+
+        //definisco i team
         this.teams = [];
-        this.CSVButton = new Button(windowWidth - 300, 50, 170, 50, "importa listone");
 
-        //buttonLoadCSV.position(0, 200);
+        //definisco i testi
+        this.PlayerName = new Medallion(windowWidth/4, windowHeight/12, 100, this.currentPlayer, 64);
+        this.Squadra = new Medallion(windowWidth/4 + this.PlayerName.GetWidth() + 20, windowHeight/12, 100, this.currentSquadra, 64);
+        this.Crediti = new Medallion(windowWidth/4, windowHeight/12 + this.PlayerName.GetHeight() + 20, 100, this.currentQuota, 64);
+        this.SquadraVincente = new Medallion(windowWidth/4 + this.Crediti.GetWidth() + 20, windowHeight/12 + this.PlayerName.GetHeight() + 20, 100, this.currentSquadraVincente, 64);
 
-        //BUTTON CSV
-
+        //definisco i pulsanti
+        this.CSVButton = new Button(windowWidth - 300, windowHeight/12, 50, "importa listone", 20, 30);
+        this.DownloadButton = new Button(windowWidth - 470, windowHeight/12, 50, "scarica rose", 20, 30);
+        this.Assegna = new Button(windowWidth/4 + this.Crediti.GetWidth() + 40 + this.SquadraVincente.GetWidth(), windowHeight/12 + this.PlayerName.GetHeight() + 20, 100, "[■]", 64, 100);
     }
 
     show(){
@@ -17,17 +28,19 @@ class AdminPage{
 
         //stampo i bottoni
         this.CSVButton.show();
+        this.DownloadButton.show();
+        this.Assegna.show();
+
+        //stampo la parte dell'asta
+        this.PlayerName.show();
+        this.Squadra.show();
+        this.Crediti.show();
+        this.SquadraVincente.show();
 
         //stampo i team
         for(var i = 0; i < this.teams.length; i++){
             this.teams[i].show(windowWidth/10 * i, windowHeight - 560);
         }
-
-        fill(0);
-        text("you are the admin", 50, 50);
-        text(this.currentQuota.toString(), 50, 100);
-
-        //CHECK CLICK ON BUTTON CSV
     }
 
     //RESIZE
@@ -45,13 +58,33 @@ class AdminPage{
     }
 
     //CAMBIARE LA QUOTA IN BASE A QUANTO HANNO AGGIUNTO
-    AddQuota(value){
+    AddQuota(value, nomeSquadra){
+        this.currentSquadraVincente = nomeSquadra;
+        this.SquadraVincente.updateText(this.currentSquadraVincente);
+        this.SquadraVincente.updateWidth();
+
         this.currentQuota += value;
+        this.Crediti.updateText(this.currentQuota);
+        this.Crediti.updateWidth();
+        
+        this.SquadraVincente.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 20);
+        this.Assegna.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 40 + this.SquadraVincente.GetWidth());
+
     }
 
     //AGGIUNGE UN TEAM A QUELLI PRESENTI
     AddTeam(name){
-        this.teams.push(new Team(name));
+        var _exist = false;
+        for(var i = 0; i < this.teams.length; i++){
+            if(this.teams[i].GetName() === name){
+                _exist = true;
+            }
+        }
+        if(!_exist){
+            this.teams.push(new Team(name));
+        }
+        else{
+        }
     }
 
     //ASKING THE CSV FILE

@@ -1,6 +1,7 @@
 class ClientPage{
-    constructor(socket){
+    constructor(socket, nome){
         var buttonPlusOne  = createButton('+1');
+        this.nomeSquadra = nome;
         this.socket = socket;
         buttonPlusOne.position(0, 200);
         buttonPlusOne.mousePressed(() => this.plusQuota(1));
@@ -8,13 +9,12 @@ class ClientPage{
 
     show(){
         background(220);
-        ellipse(mouseX, mouseY, 60, 60);
-        text("you are the client", 50, 50);
+
     }
 
     //send a plus one 
     plusQuota(plus){
-        socket.emit('plus_quota', {value: plus});
+        socket.emit('plus_quota', {value: plus, name: this.nomeSquadra});
     }
     
     //mouse pressed

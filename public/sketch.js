@@ -1,6 +1,7 @@
 var socket;
 var buttonAdmin;
 var buttonClient;
+var inputBox;
 var currentScreen = "home";
 var page;
 //----------------------------------------------------------------------------------------------------------------------------//
@@ -10,7 +11,7 @@ var page;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    socket = io.connect('http://192.168.1.14:3000');
+    socket = io.connect('http://localhost:3000');
 
     //initializing buttons
     buttonAdmin = createButton('Admin');
@@ -21,18 +22,24 @@ function setup() {
     buttonClient.position(100, 100);
     buttonClient.mousePressed(redirectClient);
 
+
+    //casella di testo
+    inputBox = createInput();
+    inputBox.position(100, 80); // Posizione sulla canvas
+    inputBox.size(200);
+
     //------------------------------------------------------ MESSAGES ---------------------------------------------------------//
     //ON CLIENT CONNECTED
     socket.on('new_client', (data) => {
         if(currentScreen === "admin"){
-            page.AddTeam("jonnyjonnyjonny");
+            page.AddTeam(data.name);
         }
         console.log('New client connected: ' + data.clientId);
     })
 
     socket.on('plus_quota', (data) => {
         if(currentScreen === "admin"){
-            page.AddQuota(data.value);
+            page.AddQuota(data.value, data.name);
         }
     })
 };
@@ -62,8 +69,9 @@ function windowResized() {
 function redirectAdmin(){
     buttonAdmin.hide();
     buttonClient.hide();
+    inputBox.hide();
 
-    socket.emit('user_role', {role: 'admin'});
+    socket.emit('user_role', {role: 'admin', name: ''});
     page = new AdminPage(socket);
     currentScreen = "admin";
 }
@@ -72,9 +80,12 @@ function redirectAdmin(){
 function redirectClient(){
     buttonAdmin.hide();
     buttonClient.hide();
+    inputBox.hide();
 
-    socket.emit('user_role', {role: 'client'});
-    page = new ClientPage();
+    nomeSquadra = inputBox.value();
+    
+    socket.emit('user_role', {role: 'client', name: nomeSquadra});
+    page = new ClientPage(socket, nomeSquadra);
     currentScreen = "client";
 }
 

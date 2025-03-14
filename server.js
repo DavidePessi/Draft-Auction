@@ -24,7 +24,6 @@ var io = socket(server, {
 
 
 io.sockets.on('connection', (socket) =>{
-  console.log('new connection: ' + socket.id);
 
   //on receiving role messages
   socket.on('user_role', (data) => {
@@ -41,12 +40,12 @@ io.sockets.on('connection', (socket) =>{
       
       //notify admin if exist
       if(adminSocket){
-        adminSocket.emit('new_client', {clientId: socket.id});
+        adminSocket.emit('new_client', {clientId: socket.id, name: data.name});
       }
     }
   });
 
   socket.on('plus_quota', (data) =>{
-    adminSocket.emit('plus_quota', {value: data.value});
+    adminSocket.emit('plus_quota', {value: data.value, name: data.name});
   })
 });

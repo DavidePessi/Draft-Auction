@@ -67,6 +67,11 @@ class Team{
         this.showNames(offsetX, offsetY);
     }
 
+    //GET NAME
+    GetName(){
+        return this.name;
+    }
+
     //ABBREVIATE NAMES
     AbbreviateName(){
         const maxWidth = windowWidth /12;
