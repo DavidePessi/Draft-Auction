@@ -8,6 +8,7 @@ class AdminPage{
         this.currentPlayer = "Gosens";
         this.currentSquadra = "Ata";
         this.currentSquadraVincente = "Jeff";
+        this.player = null;
 
         // LISTONE
         this.playersList;
@@ -16,16 +17,17 @@ class AdminPage{
         //INPUT BOX DA METTERE A POSTO
         let magnifyingIcon;        
         inputBox = createInput("");
-        inputBox.position(windowWidth - 300, windowHeight/12); // Posizione sulla canvas
+        inputBox.position(windowWidth - 300, windowHeight/40);
         inputBox.size(200);
         inputBox.style("font-size", "20px");
         inputBox.style("border", "none");
         inputBox.style("background", "white");
         inputBox.style("padding", "14px");
         inputBox.style("border-radius", "999px");
+
         magnifyingIcon = createDiv('<i class="fas fa-search"></i>');
-        magnifyingIcon.size(20, 20); // Imposta la dimensione dell'icona
-        magnifyingIcon.position(windowWidth - 100, windowHeight / 12 + 15);
+        magnifyingIcon.size(20, 20);
+        magnifyingIcon.position(windowWidth - 100, windowHeight / 40 + 15);
 
         // RICERCA GIOCATORI
         this.previousValueText = inputBox.value();
@@ -37,15 +39,15 @@ class AdminPage{
         this.teams = [];
 
         //definisco i testi
-        this.PlayerName = new Medallion(windowWidth/4, windowHeight/12, 100, this.currentPlayer, 64);
-        this.Squadra = new Medallion(windowWidth/4 + this.PlayerName.GetWidth() + 20, windowHeight/12, 100, this.currentSquadra, 64);
-        this.Crediti = new Medallion(windowWidth/4, windowHeight/12 + this.PlayerName.GetHeight() + 20, 100, this.currentQuota, 64);
-        this.SquadraVincente = new Medallion(windowWidth/4 + this.Crediti.GetWidth() + 20, windowHeight/12 + this.PlayerName.GetHeight() + 20, 100, this.currentSquadraVincente, 64);
+        this.PlayerName = new Medallion(windowWidth/4, windowHeight/20, 100, this.currentPlayer, 64);
+        this.Squadra = new Medallion(windowWidth/4 + this.PlayerName.GetWidth() + 20, windowHeight/20, 100, this.currentSquadra, 64);
+        this.Crediti = new Medallion(windowWidth/4, windowHeight/20 + this.PlayerName.GetHeight() + 20, 100, this.currentQuota, 64);
+        this.SquadraVincente = new Medallion(windowWidth/4 + this.Crediti.GetWidth() + 20, windowHeight/20 + this.PlayerName.GetHeight() + 20, 100, this.currentSquadraVincente, 64);
 
         //definisco i pulsanti
-        this.CSVButton = new Button(windowWidth - 300 - 200, windowHeight/12, 50, "importa listone", 20, 30);
-        this.DownloadButton = new Button(windowWidth - 470 - 200, windowHeight/12, 50, "scarica rose", 20, 30);
-        this.Assegna = new Button(windowWidth/4 + this.Crediti.GetWidth() + 40 + this.SquadraVincente.GetWidth(), windowHeight/12 + this.PlayerName.GetHeight() + 20, 100, "[■]", 64, 100);
+        this.CSVButton = new Button(windowWidth - 300 - 200, windowHeight/40, 50, "importa listone", 20, 30);
+        this.DownloadButton = new Button(windowWidth - 470 - 200, windowHeight/40, 50, "scarica rose", 20, 30);
+        this.Assegna = new Button(windowWidth/4 + this.Crediti.GetWidth() + 40 + this.SquadraVincente.GetWidth(), windowHeight/20 + this.PlayerName.GetHeight() + 20, 100, "[■]", 64, 100);
     }
 
     show(){
@@ -83,22 +85,49 @@ class AdminPage{
     mousePressed(){
         if(this.CSVButton.hover){
             this.askForFile();
-        }
+        } else {
+            for(var i = 0; i < this.currentResearchComponents.length; i++){
+                if(this.currentResearchComponents[i].hover){
+                    this.SelectPlayer(this.currentResearchComponents[i].player);
+                }
+            }
+            if(this.Assegna.hover){
+                this.AssegnaPlayer();
+            }
+        } 
     }
 
     // CAMBIARE LA QUOTA IN BASE A QUANTO HANNO AGGIUNTO
     AddQuota(value, nomeSquadra){
-        this.currentSquadraVincente = nomeSquadra;
-        this.SquadraVincente.updateText(this.currentSquadraVincente);
-        this.SquadraVincente.updateWidth();
+        if(!(this.currentSquadraVincente === nomeSquadra)){
+            this.currentSquadraVincente = nomeSquadra;
+            this.SquadraVincente.updateText(this.currentSquadraVincente);
+            this.SquadraVincente.updateWidth();
 
-        this.currentQuota += value;
-        this.Crediti.updateText(this.currentQuota);
-        this.Crediti.updateWidth();
-        
-        this.SquadraVincente.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 20);
-        this.Assegna.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 40 + this.SquadraVincente.GetWidth());
+            this.currentQuota += value;
+            this.Crediti.updateText(this.currentQuota);
+            this.Crediti.updateWidth();
+            
+            this.SquadraVincente.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 20);
+            this.Assegna.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 40 + this.SquadraVincente.GetWidth());
+        }
 
+    }
+
+    // ASSEGNA GIOCATORE AD UNA SQUADRA
+    AssegnaPlayer(){
+        for(var i = 0; i < this.teams.length; i++){
+            if(this.teams[i].name === this.currentSquadraVincente){
+                this.player.SetCosto(this.currentQuota);
+                this.teams[i].AddPlayer(this.player);
+
+                this.currentQuota = 0;
+                this.currentPlayer = "";
+                this.currentSquadra = "";
+                this.currentSquadraVincente = "";
+                this.player = null;
+            }
+        }
     }
 
     // AGGIUNGE UN TEAM A QUELLI PRESENTI
@@ -116,6 +145,25 @@ class AdminPage{
         }
     }
 
+    // SELECT PLAYER
+    SelectPlayer(player){
+        this.currentQuota = 0;
+        this.currentPlayer = player.GetName();
+        this.currentSquadra = player.GetSquadra();
+        this.currentSquadraVincente = "";
+        this.player = player;
+
+        this.Crediti.updateText(this.currentQuota);
+        this.PlayerName.updateText(this.currentPlayer);
+        this.Squadra.updateText(this.currentSquadra);
+        this.SquadraVincente.updateText(this.currentSquadraVincente);
+
+        this.Squadra.updateOffsetX(windowWidth/4 + this.PlayerName.GetWidth() + 20)
+        this.SquadraVincente.updateWidth();
+        this.SquadraVincente.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 20);
+        this.Assegna.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 40 + this.SquadraVincente.GetWidth());
+    }
+
     // ASKING THE XCL FILE
     askForFile() {
         const input = document.createElement("input");
@@ -130,13 +178,13 @@ class AdminPage{
                 reader.onload = (event) => {
                     const data = new Uint8Array(event.target.result);
                     const workbook = XLSX.read(data, { type: "array" });
-                    const sheetName = workbook.SheetNames[0]; // Prende il primo foglio
+                    const sheetName = workbook.SheetNames[0];
                     const sheet = workbook.Sheets[sheetName];
     
                     // Converte il foglio in un array di oggetti
                     const parsedData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
     
-                    // Ignora la prima riga (headers)
+                    // Ignora le prime 2 righe
                     this.playersList = this.createPlayers(parsedData.slice(2));
                     
                     this.displayData(this.playersList);
@@ -163,7 +211,7 @@ class AdminPage{
     // MOSTRA I DATI NELLA CONSOLE
     displayData(players) {
         console.log("Lista di Giocatori:");
-        console.table(players); // Stampa tabella nella console
+        console.table(players);
     }
 
     // CHECK SE IL TESTO NELLA BARRA DI RICERCA E' CAMBIATO
@@ -183,32 +231,32 @@ class AdminPage{
             this.currentResearchComponents.push(new PlayerSearch(this.currentResearchList[i], 20));
         }        
     }
-
+    // STAMPA DEI GIOCATORI CERCATI
     showSearchList(){
-        var offset = 75;
+        var offset = 60;
         for(var i = 0; i < this.currentResearchComponents.length; i++){
-            this.currentResearchComponents[i].show(windowWidth - 300, windowHeight/12 + offset);
+            this.currentResearchComponents[i].show(windowWidth - 300, windowHeight/40 + offset);
             offset += 60;
         }
     }
 
     // RICERCA DEI DATI ALL'INTERNO DEL DATABASE DEI GIOCATORI
     searchPlayers(input, listPlayer) {
-        if (!input || input.trim() === "") return []; // Se l'input è vuoto, restituisci un array vuoto
+        if (!input || input.trim() === "") return [];
     
-        input = input.toLowerCase().trim(); // Normalizziamo l'input
+        input = input.toLowerCase().trim();
     
         // Calcola la somiglianza tra input e nome di ogni giocatore
         let results = listPlayer
             .map(player => {
                 const playerName = player.name.toLowerCase().trim();
-                const similarity = this.levenshteinDistance(input, playerName); // Distanza di Levenshtein
-                const includesInput = playerName.includes(input) ? 0 : 1; // Se contiene direttamente il testo, meglio
+                const similarity = this.levenshteinDistance(input, playerName);
+                const includesInput = playerName.includes(input) ? 0 : 1;
     
                 return { player, score: similarity + includesInput };
             })
-            .sort((a, b) => a.score - b.score) // Ordina i risultati dal più simile al meno simile
-            .slice(0, 5) // Prende solo i primi 5
+            .sort((a, b) => a.score - b.score)
+            .slice(0, 5)
         
         this.displayData(results.map(r => r.player));
         return results.map(r => r.player);
@@ -232,6 +280,4 @@ class AdminPage{
         }
         return dp[a.length][b.length];
     }
-
-    
 }

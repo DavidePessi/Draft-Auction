@@ -1,17 +1,13 @@
 class Team{
     constructor(name){
-        this.players = [];
-        this.playersCost = [];
-        this.crediti = 50;
+        this.portieri = [];
+        this.difensori = [];
+        this.centrocampisti = [];
+        this.attaccanti = [];
+        
+        this.crediti = 500;
         this.name = name;
         this.nameShorted = this.AbbreviateName();
-        
-
-        for(var i = 0; i < 25; i++){
-            this.players.push("jeff");
-            this.playersCost.push("45");
-        }
-
         
     }
 
@@ -120,10 +116,57 @@ class Team{
 
     //SHOW NAMES
     showNames(offsetX, offsetY){
-        for(var i = 0; i < 25 ; i++){
+        var k = 0;
+        for(var i = 0; i <  this.portieri.length; i ++){
             fill(0);
-            text(this.players[i], 30 + offsetX, 33 + offsetY + 20 * i);
-            text(this.playersCost[i], offsetX + windowWidth/12 - textSize(this.playersCost[i]), 33 + offsetY + 20 * i);
+            text(this.portieri[i].GetName(), 30 + offsetX, 33 + offsetY + 20 * k);
+            text(this.portieri[i].GetCosto().toString(), offsetX + windowWidth/12 - textSize(this.portieri[i].GetCosto().toString()), 33 + offsetY + 20 * k);
+            k++;
         }
+        for(var i = 0; i < 3 - this.portieri.length; i ++){
+            k++;
+        }
+        for(var i = 0; i <  this.difensori.length; i ++){
+            fill(0);
+            text(this.difensori[i].GetName(), 30 + offsetX, 33 + offsetY + 20 * k);
+            text(this.difensori[i].GetCosto().toString(), offsetX + windowWidth/12 - textSize(this.difensori[i].GetCosto().toString()), 33 + offsetY + 20 * k);
+            k++;
+        }
+        for(var i = 0; i < 8 - this.difensori.length; i ++){
+            k++;
+        }
+        for(var i = 0; i <  this.centrocampisti.length; i ++){
+            fill(0);
+            text(this.centrocampisti[i].GetName(), 30 + offsetX, 33 + offsetY + 20 * k);
+            text(this.centrocampisti[i].GetCosto().toString(), offsetX + windowWidth/12 - textSize(this.centrocampisti[i].GetCosto().toString()), 33 + offsetY + 20 * k);
+            k++;
+        }
+        for(var i = 0; i < 8 - this.centrocampisti.length; i ++){
+            k++;
+        }
+        for(var i = 0; i <  this.attaccanti.length; i ++){
+            fill(0);
+            text(this.attaccanti[i].GetName(), 30 + offsetX, 33 + offsetY + 20 * k);
+            text(this.attaccanti[i].GetCosto().toString(), offsetX + windowWidth/12 - textSize(this.attaccanti[i].GetCosto().toString()), 33 + offsetY + 20 * k);
+            k++;
+        }
+        for(var i = 0; i < 6 - this.attaccanti.length; i ++){
+            k++;
+        }
+    }
+
+    AddPlayer(player){
+        //console.log("player: " + player);
+        if(player.GetRuolo() === "P"){
+            this.portieri.push(player);
+        }else if(player.GetRuolo() === "D"){
+            this.difensori.push(player);
+        }else if(player.GetRuolo() === "C"){
+            this.centrocampisti.push(player);
+        }else if(player.GetRuolo() === "A"){
+            this.attaccanti.push(player);
+        }
+
+        this.crediti -= player.GetCosto();
     }
 }
