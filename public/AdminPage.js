@@ -2,19 +2,38 @@ class AdminPage{
     constructor(socket){
         //var buttonLoadCSV  = createButton('Load CSV');
         this.socket = socket;
+
+        // VARIABILI ASTA
         this.currentQuota = 0;
         this.currentPlayer = "Gosens";
         this.currentSquadra = "Ata";
         this.currentSquadraVincente = "Jeff";
+
+        // LISTONE
         this.playersList;
 
-        inputBox = createInput();
-        inputBox.position(100, 80); // Posizione sulla canvas
+
+        //INPUT BOX DA METTERE A POSTO
+        let magnifyingIcon;        
+        inputBox = createInput("");
+        inputBox.position(windowWidth - 300, windowHeight/12); // Posizione sulla canvas
         inputBox.size(200);
+        inputBox.style("font-size", "20px");
+        inputBox.style("border", "none");
+        inputBox.style("background", "white");
+        inputBox.style("padding", "14px");
+        inputBox.style("border-radius", "999px");
+        magnifyingIcon = createDiv('<i class="fas fa-search"></i>');
+        magnifyingIcon.size(20, 20); // Imposta la dimensione dell'icona
+        magnifyingIcon.position(windowWidth - 100, windowHeight / 12 + 15);
+
+        // RICERCA GIOCATORI
         this.previousValueText = inputBox.value();
+        this.currentResearchList = null;
+        this.currentResearchComponents = [];
 
 
-        //definisco i team
+        // VARIABILI TEAM
         this.teams = [];
 
         //definisco i testi
@@ -24,8 +43,8 @@ class AdminPage{
         this.SquadraVincente = new Medallion(windowWidth/4 + this.Crediti.GetWidth() + 20, windowHeight/12 + this.PlayerName.GetHeight() + 20, 100, this.currentSquadraVincente, 64);
 
         //definisco i pulsanti
-        this.CSVButton = new Button(windowWidth - 300, windowHeight/12, 50, "importa listone", 20, 30);
-        this.DownloadButton = new Button(windowWidth - 470, windowHeight/12, 50, "scarica rose", 20, 30);
+        this.CSVButton = new Button(windowWidth - 300 - 200, windowHeight/12, 50, "importa listone", 20, 30);
+        this.DownloadButton = new Button(windowWidth - 470 - 200, windowHeight/12, 50, "scarica rose", 20, 30);
         this.Assegna = new Button(windowWidth/4 + this.Crediti.GetWidth() + 40 + this.SquadraVincente.GetWidth(), windowHeight/12 + this.PlayerName.GetHeight() + 20, 100, "[■]", 64, 100);
     }
 
@@ -50,6 +69,7 @@ class AdminPage{
 
         //aggiorno la ricerca giocatori
         this.checkSearch();
+        this.showSearchList();
     }
 
     // RESIZE
@@ -150,7 +170,25 @@ class AdminPage{
     checkSearch(){
         if(inputBox.value() === this.previousValueText){}else{
             this.previousValueText = inputBox.value();
-            this.searchPlayers(this.previousValueText, this.playersList);
+            this.currentResearchList = this.searchPlayers(this.previousValueText, this.playersList);
+            this.updateSearchList();
+        }
+    }
+
+    // AGGIORNO LA LISTA DEI MIEI COMPONENTI
+    updateSearchList(){
+        this.currentResearchComponents.length = 0;
+        
+        for(var i = 0; i < this.currentResearchList.length; i++){
+            this.currentResearchComponents.push(new PlayerSearch(this.currentResearchList[i], 20));
+        }        
+    }
+
+    showSearchList(){
+        var offset = 75;
+        for(var i = 0; i < this.currentResearchComponents.length; i++){
+            this.currentResearchComponents[i].show(windowWidth - 300, windowHeight/12 + offset);
+            offset += 60;
         }
     }
 
@@ -173,7 +211,7 @@ class AdminPage{
             .slice(0, 5) // Prende solo i primi 5
         
         this.displayData(results.map(r => r.player));
-        return results.map(r => r.player); // Restituisce solo gli oggetti Player
+        return results.map(r => r.player);
     }
 
     // FUNZIONE DI SIMILITUDINE
@@ -195,61 +233,5 @@ class AdminPage{
         return dp[a.length][b.length];
     }
 
-    //ASKING THE CSV FILE
-    /*
-    askForFile() {
-        const input = document.createElement("input");
-        input.type = "file";
-        input.accept = ".csv";
     
-        input.addEventListener("change", (event) => {
-            const file = event.target.files[0];
-    
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    const fileContent = event.target.result;
-                    const parsedData = this.parseCSV(fileContent);
-                    const playersList = this.createPlayers(parsedData);
-                    this.displayData(playersList);
-                };
-                reader.readAsText(file);
-            } else {
-                alert("Nessun file selezionato.");
-            }
-        });
-    
-        input.click();
-    }
-    
-    // PARSING CSV FILE INTO AN ARRAY OF OBJECTS
-    parseCSV(csvContent) {
-        const rows = csvContent.split("\n").map(row => row.trim()).filter(row => row !== "");
-        const headers = rows[0].split(",").map(header => header.trim());
-    
-        const data = rows.slice(1).map(row => {
-            const values = row.split(",").map(value => value.trim());
-            let rowData = {};
-            headers.forEach((header, index) => {
-                rowData[header] = values[index] || "";
-            });
-            return rowData;
-        });
-    
-        return data;
-    }
-    
-    // CONVERTING TO Player OBJECTS
-    createPlayers(data) {
-        return data.map(row => new Player(
-            row[Object.keys(row)[0]],
-            row[Object.keys(row)[1]],
-            row[Object.keys(row)[9]]
-        ));
-    }
-
-    displayData(players) {
-        console.log("Lista di Giocatori:");
-        console.table(players);
-    }*/
 }
