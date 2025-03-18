@@ -10,13 +10,13 @@ var socket = require('socket.io');
 app.use(express.static('public'));
 
 //PRIVATE VARIABLES
-var adminocket = null;
+var adminSocket = null;
 var clientsSockets = {}
 
 //specifying the socket
 var io = socket(server, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: "*",
       methods: ["GET", "POST"],
       credentials: true,
     },

@@ -47,7 +47,8 @@ class AdminPage{
         //definisco i pulsanti
         this.CSVButton = new Button(windowWidth - 300 - 200, windowHeight/40, 50, "importa listone", 20, 30);
         this.DownloadButton = new Button(windowWidth - 470 - 200, windowHeight/40, 50, "scarica rose", 20, 30);
-        this.Assegna = new Button(windowWidth/4 + this.Crediti.GetWidth() + 40 + this.SquadraVincente.GetWidth(), windowHeight/20 + this.PlayerName.GetHeight() + 20, 100, "[■]", 64, 100);
+        //this.Assegna = new Button(windowWidth/4 + this.Crediti.GetWidth() + 40 + this.SquadraVincente.GetWidth(), windowHeight/20 + this.PlayerName.GetHeight() + 20, 100, "[■]", 64, 100);
+        this.Assegna = new ButtonImage(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth(), windowHeight/20 + this.PlayerName.GetHeight() + 70, 100);
     }
 
     show(){
@@ -109,7 +110,7 @@ class AdminPage{
             this.Crediti.updateWidth();
             
             this.SquadraVincente.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 20);
-            this.Assegna.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 40 + this.SquadraVincente.GetWidth());
+            this.Assegna.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
         }
 
     }
@@ -161,7 +162,7 @@ class AdminPage{
         this.Squadra.updateOffsetX(windowWidth/4 + this.PlayerName.GetWidth() + 20)
         this.SquadraVincente.updateWidth();
         this.SquadraVincente.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 20);
-        this.Assegna.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 40 + this.SquadraVincente.GetWidth());
+        this.Assegna.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
     }
 
     // ASKING THE XCL FILE

@@ -90,7 +90,7 @@ function redirectClient(){
 }
 
 function mousePressed(){
-    if(currentScreen === "admin" || currentScreen === "client"){
+    if(currentScreen === "admin"){
         page.mousePressed();
     }
 }
