@@ -6,6 +6,7 @@ class Team{
         this.attaccanti = [];
         
         this.crediti = 500;
+        this.massimaPuntata = 476;
         this.name = name;
         this.nameShorted = this.AbbreviateName();
         
@@ -168,5 +169,32 @@ class Team{
         }
 
         this.crediti -= player.GetCosto();
+        this.massimaPuntata -= player.GetCosto() + 1;
+    }
+
+    GenerateListPlayers(){
+        let list = "";
+
+        this.portieri.forEach(portiere => {
+            list += "$,$,$\n";
+            list += `${this.name},${portiere.GetID()},${portiere.GetCosto()}\n`;
+        });
+
+        this.difensori.forEach(difensore => {
+            list += "$,$,$\n";
+            list += `${this.name},${difensore.GetID()},${difensore.GetCosto()}\n`;
+        });
+
+        this.centrocampisti.forEach(centrocampista => {
+            list += "$,$,$\n";
+            list += `${this.name},${centrocampista.GetID()},${centrocampista.GetCosto()}\n`;
+        });
+
+        this.attaccanti.forEach(attaccante => {
+            list += "$,$,$\n";
+            list += `${this.name},${attaccante.GetID()},${attaccante.GetCosto()}\n`;
+        });
+
+        return list;
     }
 }

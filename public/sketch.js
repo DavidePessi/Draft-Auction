@@ -11,7 +11,7 @@ var page;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    socket = io.connect('http://localhost:3000');
+    socket = io.connect('http://192.168.1.14:3000');
 
     //initializing buttons
     buttonAdmin = createButton('Admin');

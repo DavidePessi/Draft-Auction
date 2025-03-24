@@ -95,38 +95,78 @@ class AdminPage{
             if(this.Assegna.hover){
                 this.AssegnaPlayer();
             }
+
+            if(this.DownloadButton.hover){
+                this.DownloadCSV();
+            }
         } 
     }
 
     // CAMBIARE LA QUOTA IN BASE A QUANTO HANNO AGGIUNTO
     AddQuota(value, nomeSquadra){
         if(!(this.currentSquadraVincente === nomeSquadra)){
-            this.currentSquadraVincente = nomeSquadra;
-            this.SquadraVincente.updateText(this.currentSquadraVincente);
-            this.SquadraVincente.updateWidth();
-
-            this.currentQuota += value;
-            this.Crediti.updateText(this.currentQuota);
-            this.Crediti.updateWidth();
+            var squadraPropositrice;
             
-            this.SquadraVincente.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 20);
-            this.Assegna.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
+            this.teams.forEach(team => {
+                if(nomeSquadra === team.name){
+                    squadraPropositrice = team;
+                    console.log("");
+                }
+            });
+
+            // verifico se la persona ha abbastanza crediti e abbia spazio sufficiente nella squadra
+            if(squadraPropositrice.massimaPuntata >= this.currentQuota + value && (
+                (this.player.GetRuolo() === "P" && squadraPropositrice.portieri.length < 3) ||
+                (this.player.GetRuolo() === "D" && squadraPropositrice.difensori.length < 8) ||
+                (this.player.GetRuolo() === "C" && squadraPropositrice.centrocampisti.length < 8) ||
+                (this.player.GetRuolo() === "A" && squadraPropositrice.attaccanti.length < 6)
+                )){
+
+                this.currentSquadraVincente = nomeSquadra;
+                this.SquadraVincente.updateText(this.currentSquadraVincente);
+                this.SquadraVincente.updateWidth();
+
+                this.currentQuota += value;
+                this.Crediti.updateText(this.currentQuota);
+                this.Crediti.updateWidth();
+                
+                this.SquadraVincente.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 20);
+                this.Assegna.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
+            }
         }
 
     }
 
     // ASSEGNA GIOCATORE AD UNA SQUADRA
     AssegnaPlayer(){
-        for(var i = 0; i < this.teams.length; i++){
-            if(this.teams[i].name === this.currentSquadraVincente){
-                this.player.SetCosto(this.currentQuota);
-                this.teams[i].AddPlayer(this.player);
+        if(this.player != null){
+            for(var i = 0; i < this.teams.length; i++){
+                if(this.teams[i].name === this.currentSquadraVincente){
+                    this.player.SetCosto(this.currentQuota);
+                    this.teams[i].AddPlayer(this.player);
 
-                this.currentQuota = 0;
-                this.currentPlayer = "";
-                this.currentSquadra = "";
-                this.currentSquadraVincente = "";
-                this.player = null;
+                    //elimino il player dalla lista di ricerca
+                    this.DeletePlayer(this.currentPlayer);
+
+                    //resetto i dati
+                    this.currentQuota = 0;
+                    this.currentPlayer = "";
+                    this.currentSquadra = "";
+                    this.currentSquadraVincente = "";
+                    this.player = null;
+
+                    this.ResetDisplay();
+                }
+            }
+        }
+    }
+
+    // ELIMINO PLAYER DAL LISTONE
+    DeletePlayer(name) {
+        for (let i = 0; i < this.playersList.length; i++) {
+            if (this.playersList[i].GetName() === name) {
+                this.playersList.splice(i, 1);
+                return;
             }
         }
     }
@@ -146,7 +186,7 @@ class AdminPage{
         }
     }
 
-    // SELECT PLAYER
+    // SELECT PLAYER FROM RESEARCH BAR
     SelectPlayer(player){
         this.currentQuota = 0;
         this.currentPlayer = player.GetName();
@@ -154,6 +194,10 @@ class AdminPage{
         this.currentSquadraVincente = "";
         this.player = player;
 
+        this.ResetDisplay();
+    }
+
+    ResetDisplay(){
         this.Crediti.updateText(this.currentQuota);
         this.PlayerName.updateText(this.currentPlayer);
         this.Squadra.updateText(this.currentSquadra);
@@ -163,6 +207,29 @@ class AdminPage{
         this.SquadraVincente.updateWidth();
         this.SquadraVincente.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 20);
         this.Assegna.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
+    }
+
+    // GENERAZIONE FILE ROSE
+    GenerateCSV() {
+        let csvContent = "";
+        
+        this.teams.forEach(team => {
+            csvContent += team.GenerateListPlayers();
+        });
+        
+        return csvContent;
+    }
+
+    // EXPORT FILE ROSE
+    DownloadCSV(filename = "rose.csv") {
+        const csvContent = this.GenerateCSV();
+        const blob = new Blob([csvContent], { type: "text/csv" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
     // ASKING THE XCL FILE
@@ -198,6 +265,9 @@ class AdminPage{
     
         input.click();
     }
+
+
+
     
     // CREAZIONE DEGLI OGGETTI Player
     createPlayers(data) {
@@ -214,6 +284,8 @@ class AdminPage{
         console.log("Lista di Giocatori:");
         console.table(players);
     }
+
+
 
     // CHECK SE IL TESTO NELLA BARRA DI RICERCA E' CAMBIATO
     checkSearch(){
@@ -232,6 +304,7 @@ class AdminPage{
             this.currentResearchComponents.push(new PlayerSearch(this.currentResearchList[i], 20));
         }        
     }
+
     // STAMPA DEI GIOCATORI CERCATI
     showSearchList(){
         var offset = 60;
