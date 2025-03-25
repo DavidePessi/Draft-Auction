@@ -20,6 +20,12 @@ class Team{
                              false, false, false, false, false,
                              false, false, false, false, false
                             ];
+
+        this.preload();
+    }
+
+    preload() {
+        this.image = loadImage('./images/trash.png');
     }
 
     show(offsetX, offsetY){
@@ -167,6 +173,11 @@ class Team{
                 }
                 
                 circle(offsetX - 3 + windowWidth/12, 30 + offsetY + 20 * k, 15);
+                let imgSize = 15 * 0.6;
+                let imgX = offsetX - 3 + windowWidth/12 - imgSize / 2;
+                let imgY = 30 + offsetY + 20 * k - imgSize / 2;
+                
+                image(this.image, imgX, imgY, imgSize, imgSize);
             } else {
                 text(this.portieri[i].GetCosto().toString(), offsetX + windowWidth/12 - textSize(this.portieri[i].GetCosto().toString()), 33 + offsetY + 20 * k);
             }
@@ -189,6 +200,11 @@ class Team{
                 }
 
                 circle(offsetX - 3 + windowWidth/12, 30 + offsetY + 20 * k, 15);
+                let imgSize = 15 * 0.6;
+                let imgX = offsetX - 3 + windowWidth/12 - imgSize / 2;
+                let imgY = 30 + offsetY + 20 * k - imgSize / 2;
+                
+                image(this.image, imgX, imgY, imgSize, imgSize);
             } else {
                 text(this.difensori[i].GetCosto().toString(), offsetX + windowWidth/12 - textSize(this.difensori[i].GetCosto().toString()), 33 + offsetY + 20 * k);
             }
@@ -211,6 +227,11 @@ class Team{
                 }
 
                 circle(offsetX - 3 + windowWidth/12, 30 + offsetY + 20 * k, 15);
+                let imgSize = 15 * 0.6;
+                let imgX = offsetX - 3 + windowWidth/12 - imgSize / 2;
+                let imgY = 30 + offsetY + 20 * k - imgSize / 2;
+                
+                image(this.image, imgX, imgY, imgSize, imgSize);
             } else {
                 text(this.centrocampisti[i].GetCosto().toString(), offsetX + windowWidth/12 - textSize(this.centrocampisti[i].GetCosto().toString()), 33 + offsetY + 20 * k);
             }
@@ -232,6 +253,11 @@ class Team{
                 }
 
                 circle(offsetX - 3 + windowWidth/12, 30 + offsetY + 20 * k, 15);
+                let imgSize = 15 * 0.6;
+                let imgX = offsetX - 3 + windowWidth/12 - imgSize / 2;
+                let imgY = 30 + offsetY + 20 * k - imgSize / 2;
+                
+                image(this.image, imgX, imgY, imgSize, imgSize);
             } else {
                 text(this.attaccanti[i].GetCosto().toString(), offsetX + windowWidth/12 - textSize(this.attaccanti[i].GetCosto().toString()), 33 + offsetY + 20 * k);
             }
