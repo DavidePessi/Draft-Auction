@@ -99,6 +99,12 @@ class AdminPage{
             if(this.DownloadButton.hover){
                 this.DownloadCSV();
             }
+
+            for(var i = 0; i < this.teams.length; i++){
+                if(this.teams[i].hover){
+                    this.playersList.push(this.teams[i].RemovePlayer());
+                }
+            }
         } 
     }
 

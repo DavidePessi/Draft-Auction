@@ -9,7 +9,17 @@ class Team{
         this.massimaPuntata = 476;
         this.name = name;
         this.nameShorted = this.AbbreviateName();
-        
+
+        this.currentOffsetX = 0;
+        this.currentOffsetY = 0;
+
+        this.hover = false;
+        this.deleteHovers = [false, false, false, false, false,
+                             false, false, false, false, false,
+                             false, false, false, false, false,
+                             false, false, false, false, false,
+                             false, false, false, false, false
+                            ];
     }
 
     show(offsetX, offsetY){
@@ -30,8 +40,14 @@ class Team{
 
         //stampa sfondo
         noStroke();
+        if(this.CheckHover()){
+            stroke(color(0));
+            strokeWeight(3);
+        }
         fill(192, 252, 159);
         rect(10 + offsetX, 11 + offsetY, windowWidth/12, 520, 15); 
+
+        noStroke();
 
         //stampa coin
         this.showCoinP(0 + offsetY, offsetX);
@@ -62,14 +78,33 @@ class Team{
 
         //stampa nomi giocatori presi
         this.showNames(offsetX, offsetY);
+
+        this.currentOffsetX = offsetX;
+        this.currentOffsetY = offsetY;
     }
 
-    //GET NAME
+    // CHECK IF MOUSE IS HOVER THE TEAM
+    CheckHover(){
+        this.hover = (mouseX > 10 + this.currentOffsetX &&
+            mouseX < 10 + this.currentOffsetX + windowWidth/12 &&
+            mouseY > 11 + this.currentOffsetY &&
+            mouseY < 11 + this.currentOffsetY + 520
+        );
+        return this.hover;
+    }
+
+    // CHECK IF MOUSE IS HOVER A DELETE BUTTON
+    CheckHoverDelete(offsetX, offsetY, radius, k){
+        let d = dist(mouseX, mouseY, offsetX, offsetY);
+        this.deleteHovers[k] = (d < radius);
+    }
+
+    // GET NAME
     GetName(){
         return this.name;
     }
 
-    //ABBREVIATE NAMES
+    // ABBREVIATE NAMES
     AbbreviateName(){
         const maxWidth = windowWidth /12;
         var result = this.name;
@@ -85,7 +120,7 @@ class Team{
         this.nameShorted = this.AbbreviateName();
     }
 
-    //SHOW COIN
+    // SHOW COIN
     showCoinP(offsetY, offsetX){
         noStroke();
         fill(235, 174, 52);
@@ -115,13 +150,26 @@ class Team{
         text("a", 17 + offsetX, 33 + offsetY);
     }
 
-    //SHOW NAMES
+    // SHOW NAMES
     showNames(offsetX, offsetY){
         var k = 0;
         for(var i = 0; i <  this.portieri.length; i ++){
             fill(0);
             text(this.portieri[i].GetName(), 30 + offsetX, 33 + offsetY + 20 * k);
-            text(this.portieri[i].GetCosto().toString(), offsetX + windowWidth/12 - textSize(this.portieri[i].GetCosto().toString()), 33 + offsetY + 20 * k);
+
+            if(this.hover){
+                this.CheckHoverDelete(offsetX - 3 + windowWidth/12, 30 + offsetY + 20 * k, 15/2, k);
+
+                noStroke();
+                fill(255, 0, 0);
+                if(this.deleteHovers[k]){
+                    fill(255);
+                }
+                
+                circle(offsetX - 3 + windowWidth/12, 30 + offsetY + 20 * k, 15);
+            } else {
+                text(this.portieri[i].GetCosto().toString(), offsetX + windowWidth/12 - textSize(this.portieri[i].GetCosto().toString()), 33 + offsetY + 20 * k);
+            }
             k++;
         }
         for(var i = 0; i < 3 - this.portieri.length; i ++){
@@ -130,7 +178,20 @@ class Team{
         for(var i = 0; i <  this.difensori.length; i ++){
             fill(0);
             text(this.difensori[i].GetName(), 30 + offsetX, 33 + offsetY + 20 * k);
-            text(this.difensori[i].GetCosto().toString(), offsetX + windowWidth/12 - textSize(this.difensori[i].GetCosto().toString()), 33 + offsetY + 20 * k);
+
+            if(this.hover){
+                this.CheckHoverDelete(offsetX - 3 + windowWidth/12, 30 + offsetY + 20 * k, 15/2, k);
+
+                noStroke();
+                fill(255, 0, 0);
+                if(this.deleteHovers[k]){
+                    fill(255);
+                }
+
+                circle(offsetX - 3 + windowWidth/12, 30 + offsetY + 20 * k, 15);
+            } else {
+                text(this.difensori[i].GetCosto().toString(), offsetX + windowWidth/12 - textSize(this.difensori[i].GetCosto().toString()), 33 + offsetY + 20 * k);
+            }
             k++;
         }
         for(var i = 0; i < 8 - this.difensori.length; i ++){
@@ -139,7 +200,20 @@ class Team{
         for(var i = 0; i <  this.centrocampisti.length; i ++){
             fill(0);
             text(this.centrocampisti[i].GetName(), 30 + offsetX, 33 + offsetY + 20 * k);
-            text(this.centrocampisti[i].GetCosto().toString(), offsetX + windowWidth/12 - textSize(this.centrocampisti[i].GetCosto().toString()), 33 + offsetY + 20 * k);
+
+            if(this.hover){
+                this.CheckHoverDelete(offsetX - 3 + windowWidth/12, 30 + offsetY + 20 * k, 15/2, k);
+
+                noStroke();
+                fill(255, 0, 0);
+                if(this.deleteHovers[k]){
+                    fill(255);
+                }
+
+                circle(offsetX - 3 + windowWidth/12, 30 + offsetY + 20 * k, 15);
+            } else {
+                text(this.centrocampisti[i].GetCosto().toString(), offsetX + windowWidth/12 - textSize(this.centrocampisti[i].GetCosto().toString()), 33 + offsetY + 20 * k);
+            }
             k++;
         }
         for(var i = 0; i < 8 - this.centrocampisti.length; i ++){
@@ -148,7 +222,19 @@ class Team{
         for(var i = 0; i <  this.attaccanti.length; i ++){
             fill(0);
             text(this.attaccanti[i].GetName(), 30 + offsetX, 33 + offsetY + 20 * k);
-            text(this.attaccanti[i].GetCosto().toString(), offsetX + windowWidth/12 - textSize(this.attaccanti[i].GetCosto().toString()), 33 + offsetY + 20 * k);
+            if(this.hover){
+                this.CheckHoverDelete(offsetX - 3 + windowWidth/12, 30 + offsetY + 20 * k, 15/2, k);
+
+                noStroke();
+                fill(255, 0, 0);
+                if(this.deleteHovers[k]){
+                    fill(255);
+                }
+
+                circle(offsetX - 3 + windowWidth/12, 30 + offsetY + 20 * k, 15);
+            } else {
+                text(this.attaccanti[i].GetCosto().toString(), offsetX + windowWidth/12 - textSize(this.attaccanti[i].GetCosto().toString()), 33 + offsetY + 20 * k);
+            }
             k++;
         }
         for(var i = 0; i < 6 - this.attaccanti.length; i ++){
@@ -170,6 +256,47 @@ class Team{
 
         this.crediti -= player.GetCosto();
         this.massimaPuntata -= player.GetCosto() + 1;
+    }
+
+    // RIMUOVE IL GIOCATORE CHE STO CERCANDO DI ELIMINARE
+    RemovePlayer(){
+        var playerEliminated = null;
+        for(var i = 0; i < 3; i++){
+            if(this.deleteHovers[i]){
+                playerEliminated = this.portieri[i];
+                this.crediti += playerEliminated.GetCosto();
+                this.massimaPuntata += playerEliminated.GetCosto() - 1;
+                this.portieri.splice(i, 1);
+            }
+        }
+
+        for(var i = 0; i < 8; i++){
+            if(this.deleteHovers[3 + i]){
+                playerEliminated = this.difensori[i];
+                this.crediti += playerEliminated.GetCosto();
+                this.massimaPuntata += playerEliminated.GetCosto() - 1;
+                this.difensori.splice(i, 1);
+            }
+        }
+
+        for(var i = 0; i < 8; i++){
+            if(this.deleteHovers[11 + i]){
+                playerEliminated = this.centrocampisti[i];
+                this.crediti += playerEliminated.GetCosto();
+                this.massimaPuntata += playerEliminated.GetCosto() - 1;
+                this.centrocampisti.splice(i, 1);
+            }
+        }
+
+        for(var i = 0; i < 6; i++){
+            if(this.deleteHovers[19 + i]){
+                playerEliminated = this.attaccanti[i];
+                this.crediti += playerEliminated.GetCosto();
+                this.massimaPuntata += playerEliminated.GetCosto() - 1;
+                this.attaccanti.splice(i, 1);
+            }
+        }
+        return playerEliminated;
     }
 
     GenerateListPlayers(){
