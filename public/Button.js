@@ -38,8 +38,21 @@ class Button{
             mouseX < this.buttonX + this.buttonW &&
             mouseY > this.buttonY &&
             mouseY < this.buttonY + this.buttonH
-        );
+        ) && (isTouching || !this.isMobile());
+
         return this.hover;
     }
 
+    isMobile() {
+        return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    } 
+
+}
+
+function touchStarted() {
+    isTouching = true;
+}
+
+function touchEnded() {
+    isTouching = false;
 }
