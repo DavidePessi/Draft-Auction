@@ -1,10 +1,13 @@
 class Button{
     constructor(x, y, h, text, sizeText, roundness){
+        this.originalX = x;
+        this.originalY = y;
         this.buttonX = x;
         this.buttonY = y;
         this.buttonH = h;
         this.text = text;
         this.textSize = sizeText;
+        this.moveOffset = 5;
         this.hover = false;
         this.roundness = roundness;
 
@@ -12,6 +15,8 @@ class Button{
         textSize(sizeText);
         this.buttonW = 40 + textWidth(this.text);
         textSize(12);
+
+        this.targetY = y;
     }
 
     show(){
@@ -19,6 +24,9 @@ class Button{
             stroke(color(255));
             strokeWeight(3);
         }
+
+        this.buttonY = lerp(this.buttonY, this.targetY, 0.1);
+
         fill(194, 252, 159);
         rect(this.buttonX, this.buttonY, this.buttonW, this.buttonH, this.roundness); 
         noStroke();
@@ -33,12 +41,20 @@ class Button{
         this.buttonX = newOffsetX;
     }
 
-    checkHover(){
+    checkHover() {
         this.hover = (mouseX > this.buttonX &&
             mouseX < this.buttonX + this.buttonW &&
             mouseY > this.buttonY &&
             mouseY < this.buttonY + this.buttonH
         ) && (isTouching || !this.isMobile());
+
+
+        // Set destination
+        if (this.hover) {
+            this.targetY = this.originalY - this.moveOffset;
+        } else {
+            this.targetY = this.originalY;
+        }
 
         return this.hover;
     }
