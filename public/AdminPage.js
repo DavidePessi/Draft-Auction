@@ -1,14 +1,14 @@
 class AdminPage{
     constructor(socket){
-        //var buttonLoadCSV  = createButton('Load CSV');
         this.socket = socket;
 
         // VARIABILI ASTA
         this.currentQuota = 0;
-        this.currentPlayer = "Gosens";
-        this.currentSquadra = "Ata";
-        this.currentSquadraVincente = "Jeff";
+        this.currentPlayer = "";
+        this.currentSquadra = "";
+        this.currentSquadraVincente = "";
         this.player = null;
+        this.isPlayerAssignable = false;        //true se il tempo è scaduto false otherwise
 
         // LISTONE
         this.playersList;
@@ -38,6 +38,9 @@ class AdminPage{
         // VARIABILI TEAM
         this.teams = [];
 
+        //margin left buttons
+        this.marginLeftButtons = 15;
+
         //definisco i testi
         this.PlayerName = new Medallion(windowWidth/4, windowHeight/20, 100, this.currentPlayer, 64);
         this.Squadra = new Medallion(windowWidth/4 + this.PlayerName.GetWidth() + 20, windowHeight/20, 100, this.currentSquadra, 64);
@@ -45,19 +48,32 @@ class AdminPage{
         this.SquadraVincente = new Medallion(windowWidth/4 + this.Crediti.GetWidth() + 20, windowHeight/20 + this.PlayerName.GetHeight() + 20, 100, this.currentSquadraVincente, 64);
 
         //definisco i pulsanti
-        this.CSVButton = new Button(windowWidth - 300 - 200, windowHeight/40, 50, "importa listone", 20, 30);
-        this.DownloadButton = new Button(windowWidth - 470 - 200, windowHeight/40, 50, "scarica rose", 20, 30);
-        //this.Assegna = new Button(windowWidth/4 + this.Crediti.GetWidth() + 40 + this.SquadraVincente.GetWidth(), windowHeight/20 + this.PlayerName.GetHeight() + 20, 100, "[■]", 64, 100);
-        this.Assegna = new ButtonImage(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth(), windowHeight/20 + this.PlayerName.GetHeight() + 70, 100);
+        this.CSVButton = new Button(windowWidth - 300 - 170 - this.marginLeftButtons, windowHeight/40, 50, "importa listone", 20, 30);
+        this.DownloadButton = new Button(windowWidth - 300 - 170 - 147 - 2 * this.marginLeftButtons, windowHeight/40, 50, "scarica rose", 20, 30);
+        this.Pause = new ButtonImage(windowWidth - 300 - 170 - 147 - 25 -  3 * this.marginLeftButtons, windowHeight/40 + 25, 50, './images/pause.png', './images/resume.png');
+        this.Assegna = new ButtonImage(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth(), windowHeight/20 + this.PlayerName.GetHeight() + 70, 100, './images/martello.png', null);
+        
+
+        //definisco il timer
+        this.timer = new Timer(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth(), windowHeight/20 + this.PlayerName.GetHeight() + 70, 100, 64);
     }
 
     show(){
         background(59);
 
+        //stampo il timer
+        if(!this.isPlayerAssignable){
+            this.timer.show();
+        }
+
         //stampo i bottoni
         this.CSVButton.show();
         this.DownloadButton.show();
-        this.Assegna.show();
+        this.Pause.show();
+
+        if(this.isPlayerAssignable){
+            this.Assegna.show();
+        }
 
         //stampo la parte dell'asta
         this.PlayerName.show();
@@ -73,6 +89,12 @@ class AdminPage{
         //aggiorno la ricerca giocatori
         this.checkSearch();
         this.showSearchList();
+
+        //verifico se il timer è scaduto
+        if(this.timer.time === 0){
+            this.isPlayerAssignable = true;
+            this.timer.time = 15;
+        }
     }
 
     // RESIZE
@@ -98,6 +120,16 @@ class AdminPage{
 
             if(this.DownloadButton.hover){
                 this.DownloadCSV();
+            }
+
+            if(this.Pause.hover && this.isPlayerAssignable === false && this.currentPlayer !== ""){
+                if(this.timer.isPaused){
+                    this.timer.resumeTimer();
+                    this.Pause.switchImage();
+                } else {
+                    this.timer.pauseTimer();
+                    this.Pause.switchImage();
+                }
             }
 
             for(var i = 0; i < this.teams.length; i++){
@@ -126,18 +158,25 @@ class AdminPage{
                 (this.player.GetRuolo() === "D" && squadraPropositrice.difensori.length < 8) ||
                 (this.player.GetRuolo() === "C" && squadraPropositrice.centrocampisti.length < 8) ||
                 (this.player.GetRuolo() === "A" && squadraPropositrice.attaccanti.length < 6)
-                )){
+                ) &&
+                this.isPlayerAssignable === false
+                ){
 
-                this.currentSquadraVincente = nomeSquadra;
-                this.SquadraVincente.updateText(this.currentSquadraVincente);
-                this.SquadraVincente.updateWidth();
+                    //modifico i valori della squadra che sta prendendo, crediti
+                    this.currentSquadraVincente = nomeSquadra;
+                    this.SquadraVincente.updateText(this.currentSquadraVincente);
+                    this.SquadraVincente.updateWidth();
 
-                this.currentQuota += value;
-                this.Crediti.updateText(this.currentQuota);
-                this.Crediti.updateWidth();
-                
-                this.SquadraVincente.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 20);
-                this.Assegna.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
+                    this.currentQuota += value;
+                    this.Crediti.updateText(this.currentQuota);
+                    this.Crediti.updateWidth();
+                    
+                    this.SquadraVincente.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 20);
+                    this.Assegna.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
+                    this.timer.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
+
+                    //resetto il timer
+                    this.timer.startTimer();
             }
         }
 
@@ -164,7 +203,7 @@ class AdminPage{
                     this.ResetDisplay();
                 }
             }
-        }
+        }        
     }
 
     // ELIMINO PLAYER DAL LISTONE
@@ -201,6 +240,9 @@ class AdminPage{
         this.player = player;
 
         this.ResetDisplay();
+
+        this.timer.startTimer();
+        this.isPlayerAssignable = false;
     }
 
     ResetDisplay(){
@@ -213,6 +255,7 @@ class AdminPage{
         this.SquadraVincente.updateWidth();
         this.SquadraVincente.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 20);
         this.Assegna.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
+        this.timer.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
     }
 
     // GENERAZIONE FILE ROSE
@@ -296,9 +339,11 @@ class AdminPage{
     // CHECK SE IL TESTO NELLA BARRA DI RICERCA E' CAMBIATO
     checkSearch(){
         if(inputBox.value() === this.previousValueText){}else{
-            this.previousValueText = inputBox.value();
-            this.currentResearchList = this.searchPlayers(this.previousValueText, this.playersList);
-            this.updateSearchList();
+            if(this.playersList != null){
+                this.previousValueText = inputBox.value();
+                this.currentResearchList = this.searchPlayers(this.previousValueText, this.playersList);
+                this.updateSearchList();
+            }
         }
     }
 

@@ -1,15 +1,21 @@
 class ButtonImage{
-    constructor(x, y, h){
+    constructor(x, y, h, image, image2){
         this.buttonX = x;
         this.buttonY = y;
         this.buttonH = h;
         this.hover = false;
+        this.switch = false;
 
-        this.preload();
+        this.preload(image, image2);
     }
 
-    preload() {
-        this.image = loadImage('./images/martello.png');
+    preload(image, image2) {
+        this.image = loadImage(image);
+        this.image2 = null;
+
+        if(image2 != null){
+            this.image2 = loadImage(image2);
+        }
     }
 
     show(){
@@ -26,7 +32,17 @@ class ButtonImage{
         let imgX = this.buttonX - imgSize / 2;
         let imgY = this.buttonY - imgSize / 2;
         
-        image(this.image, imgX, imgY, imgSize, imgSize);
+        if(!this.switch){
+            image(this.image, imgX, imgY, imgSize, imgSize);
+        } else{
+            image(this.image2, imgX, imgY, imgSize, imgSize);
+        }
+    }
+
+    switchImage(){
+        if(this.image2 != null){
+            this.switch = !this.switch;
+        }
     }
 
     updateOffsetX(newOffsetX){
@@ -35,9 +51,8 @@ class ButtonImage{
 
     checkHover() {
         let d = dist(mouseX, mouseY, this.buttonX, this.buttonY);
-        this.hover = (d < this.buttonH);
+        this.hover = (d < (this.buttonH/2));
         
         return this.hover;
     }
-
 }

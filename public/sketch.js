@@ -13,7 +13,7 @@ var previousTouchClient = false;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    socket = io.connect('http://172.20.10.2:3000');
+    socket = io.connect('http://localhost:3000');
 
     //initializing buttons
     this.AdminButton = new Button(windowWidth/2 + 100, windowHeight * 9/24, 100, "Admin", 0.8 * windowWidth/10, 100);
