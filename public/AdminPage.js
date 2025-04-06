@@ -14,8 +14,7 @@ class AdminPage{
         this.playersList;
 
 
-        //INPUT BOX DA METTERE A POSTO
-        let magnifyingIcon;        
+        // INPUT BOX
         inputBox = createInput("");
         inputBox.position(windowWidth - 300, windowHeight/40);
         inputBox.size(200);
@@ -25,9 +24,9 @@ class AdminPage{
         inputBox.style("padding", "14px");
         inputBox.style("border-radius", "999px");
 
-        magnifyingIcon = createDiv('<i class="fas fa-search"></i>');
-        magnifyingIcon.size(20, 20);
-        magnifyingIcon.position(windowWidth - 100, windowHeight / 40 + 15);
+        this.magnifyingIcon = createDiv('<i class="fas fa-search"></i>');
+        this.magnifyingIcon.size(20, 20);
+        this.magnifyingIcon.position(windowWidth - 100, windowHeight / 40 + 15);
 
         // RICERCA GIOCATORI
         this.previousValueText = inputBox.value();
@@ -38,23 +37,23 @@ class AdminPage{
         // VARIABILI TEAM
         this.teams = [];
 
-        //margin left buttons
+        // MARGIN LEFT BUTTONS
         this.marginLeftButtons = 15;
 
-        //definisco i testi
+        // DEFINISCO I TESTI
         this.PlayerName = new Medallion(windowWidth/4, windowHeight/20, 100, this.currentPlayer, 64);
         this.Squadra = new Medallion(windowWidth/4 + this.PlayerName.GetWidth() + 20, windowHeight/20, 100, this.currentSquadra, 64);
         this.Crediti = new Medallion(windowWidth/4, windowHeight/20 + this.PlayerName.GetHeight() + 20, 100, this.currentQuota, 64);
         this.SquadraVincente = new Medallion(windowWidth/4 + this.Crediti.GetWidth() + 20, windowHeight/20 + this.PlayerName.GetHeight() + 20, 100, this.currentSquadraVincente, 64);
 
-        //definisco i pulsanti
+        // DEFINISCO I PULSANTI
         this.CSVButton = new Button(windowWidth - 300 - 170 - this.marginLeftButtons, windowHeight/40, 50, "importa listone", 20, 30);
         this.DownloadButton = new Button(windowWidth - 300 - 170 - 147 - 2 * this.marginLeftButtons, windowHeight/40, 50, "scarica rose", 20, 30);
         this.Pause = new ButtonImage(windowWidth - 300 - 170 - 147 - 25 -  3 * this.marginLeftButtons, windowHeight/40 + 25, 50, './images/pause.png', './images/resume.png');
         this.Assegna = new ButtonImage(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth(), windowHeight/20 + this.PlayerName.GetHeight() + 70, 100, './images/martello.png', null);
         
 
-        //definisco il timer
+        // DEFINISCO IL TIMER
         this.timer = new Timer(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth(), windowHeight/20 + this.PlayerName.GetHeight() + 70, 100, 64);
     }
 
@@ -97,11 +96,25 @@ class AdminPage{
         }
     }
 
-    // RESIZE
+    // RESIZE: chiamata quando abbiamo un cambiamento della pagina
     Resize(){
         for(var i = 0; i < this.teams.length; i++){
             this.teams[i].Resize();
         }
+
+        inputBox.position(windowWidth - 300, windowHeight/40);
+        this.magnifyingIcon.position(windowWidth - 100, windowHeight / 40 + 15);
+        this.CSVButton.updateOffsetX(windowWidth - 300 - 170 - this.marginLeftButtons);
+        this.DownloadButton.updateOffsetX(windowWidth - 300 - 170 - 147 - 2 * this.marginLeftButtons);
+        this.Pause.updateOffsetX(windowWidth - 300 - 170 - 147 - 25 -  3 * this.marginLeftButtons);
+
+        this.PlayerName.updateOffsetX(windowWidth/4);
+        this.Squadra.updateOffsetX(windowWidth/4 + this.PlayerName.GetWidth() + 20);
+        this.Crediti.updateOffsetX(windowWidth/4, windowHeight/20 + this.PlayerName.GetHeight() + 20);
+        this.SquadraVincente.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 20, windowHeight/20 + this.PlayerName.GetHeight() + 20);
+
+        this.Assegna.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
+        this.timer.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
     }
 
     // CLICK BUTTON FUNCTIONS
