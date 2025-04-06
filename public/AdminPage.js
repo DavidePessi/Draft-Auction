@@ -3,15 +3,18 @@ class AdminPage{
         this.socket = socket;
 
         // VARIABILI ASTA
-        this.currentQuota = 0;
-        this.currentPlayer = "";
-        this.currentSquadra = "";
-        this.currentSquadraVincente = "";
+        this.currentQuota = 0;                  // Valore che una squadra ha puntato per prendere il giocatore corrente
+        this.currentPlayer = "";                // Nome del giocatore corrente
+        this.currentSquadra = "";               // Squadra del giocatore corrente
+        this.currentSquadraVincente = "";       // Fanta squadra che ha messo l'ultima puntata per il giocatore corrente
         this.player = null;
-        this.isPlayerAssignable = false;        //true se il tempo è scaduto false otherwise
+        this.isPlayerAssignable = false;        // True se il tempo è scaduto false otherwise
 
         // LISTONE
-        this.playersList;
+        this.playersList;                       // Lista di tutti i giocatori sottoforma di tipo Player
+
+        // STYLE VARIABLES
+        this.marginLeftButtons = 15;
 
 
         // INPUT BOX
@@ -28,17 +31,13 @@ class AdminPage{
         this.magnifyingIcon.size(20, 20);
         this.magnifyingIcon.position(windowWidth - 100, windowHeight / 40 + 15);
 
-        // RICERCA GIOCATORI
+        // VARIABILI RICERCA GIOCATORI
         this.previousValueText = inputBox.value();
         this.currentResearchList = null;
         this.currentResearchComponents = [];
 
-
         // VARIABILI TEAM
         this.teams = [];
-
-        // MARGIN LEFT BUTTONS
-        this.marginLeftButtons = 15;
 
         // DEFINISCO I TESTI
         this.PlayerName = new Medallion(windowWidth/4, windowHeight/20, 100, this.currentPlayer, 64);
@@ -57,15 +56,17 @@ class AdminPage{
         this.timer = new Timer(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth(), windowHeight/20 + this.PlayerName.GetHeight() + 70, 100, 64);
     }
 
+    // SHOW: chiamata ogni fram
     show(){
+        // STAMPA
         background(59);
 
-        //stampo il timer
+        // stampo il timer
         if(!this.isPlayerAssignable){
             this.timer.show();
         }
 
-        //stampo i bottoni
+        // stampo i bottoni
         this.CSVButton.show();
         this.DownloadButton.show();
         this.Pause.show();
@@ -74,22 +75,24 @@ class AdminPage{
             this.Assegna.show();
         }
 
-        //stampo la parte dell'asta
+        // stampo la parte dell'asta
         this.PlayerName.show();
         this.Squadra.show();
         this.Crediti.show();
         this.SquadraVincente.show();
 
-        //stampo i team
+        // stampo i team
         for(var i = 0; i < this.teams.length; i++){
             this.teams[i].show(windowWidth/10 * i, windowHeight - 560);
         }
 
-        //aggiorno la ricerca giocatori
+        // ESECUZIONE DI FUNZIONI
+
+        // aggiorno la ricerca giocatori
         this.checkSearch();
         this.showSearchList();
 
-        //verifico se il timer è scaduto
+        // verifico se il timer è scaduto
         if(this.timer.time === 0){
             this.isPlayerAssignable = true;
             this.timer.time = 15;
@@ -117,24 +120,31 @@ class AdminPage{
         this.timer.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
     }
 
-    // CLICK BUTTON FUNCTIONS
+    // MOUSE PRESSED: chiamata quando viene fatto click con il tasto sinistro del mouse
     mousePressed(){
+
+        // check if CSVButton is being pressed
         if(this.CSVButton.hover){
             this.askForFile();
         } else {
+            // check if any researched player is being pressed
             for(var i = 0; i < this.currentResearchComponents.length; i++){
                 if(this.currentResearchComponents[i].hover){
                     this.SelectPlayer(this.currentResearchComponents[i].player);
                 }
             }
+
+            // check if any Assegna is being pressed
             if(this.Assegna.hover){
                 this.AssegnaPlayer();
             }
 
+            // check if DownloadButton is being pressed
             if(this.DownloadButton.hover){
                 this.DownloadCSV();
             }
 
+            // check if Pause is being pressed
             if(this.Pause.hover && this.isPlayerAssignable === false && this.currentPlayer !== ""){
                 if(this.timer.isPaused){
                     this.timer.resumeTimer();
@@ -145,6 +155,7 @@ class AdminPage{
                 }
             }
 
+            // check if any team is being pressed
             for(var i = 0; i < this.teams.length; i++){
                 if(this.teams[i].hover){
                     this.playersList.push(this.teams[i].RemovePlayer());
@@ -153,8 +164,10 @@ class AdminPage{
         } 
     }
 
-    // CAMBIARE LA QUOTA IN BASE A QUANTO HANNO AGGIUNTO
+    // ADD QUOTA: chiamata quando una fanta squadra ha mandato una nuova offerta per il giocatore
     AddQuota(value, nomeSquadra){
+
+        // verifico se la squadra esiste e la cerco
         if(!(this.currentSquadraVincente === nomeSquadra)){
             var squadraPropositrice;
             
@@ -175,7 +188,7 @@ class AdminPage{
                 this.isPlayerAssignable === false
                 ){
 
-                    //modifico i valori della squadra che sta prendendo, crediti
+                    // modifico i valori della squadra che sta prendendo, crediti
                     this.currentSquadraVincente = nomeSquadra;
                     this.SquadraVincente.updateText(this.currentSquadraVincente);
                     this.SquadraVincente.updateWidth();
@@ -188,25 +201,26 @@ class AdminPage{
                     this.Assegna.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
                     this.timer.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
 
-                    //resetto il timer
+                    // resetto il timer
                     this.timer.startTimer();
             }
         }
 
     }
 
-    // ASSEGNA GIOCATORE AD UNA SQUADRA
+    // ASSEGNAPLAYER: chiamata quando schiaccio il tasto Assegna
     AssegnaPlayer(){
+        // se la fanta squadra esiste assegno il giocatore
         if(this.player != null){
             for(var i = 0; i < this.teams.length; i++){
                 if(this.teams[i].name === this.currentSquadraVincente){
                     this.player.SetCosto(this.currentQuota);
                     this.teams[i].AddPlayer(this.player);
 
-                    //elimino il player dalla lista di ricerca
+                    // elimino il player dalla lista di ricerca
                     this.DeletePlayer(this.currentPlayer);
 
-                    //resetto i dati
+                    // resetto i dati
                     this.currentQuota = 0;
                     this.currentPlayer = "";
                     this.currentSquadra = "";
@@ -219,7 +233,7 @@ class AdminPage{
         }        
     }
 
-    // ELIMINO PLAYER DAL LISTONE
+    // DELETEPLAYER: chiamata quando devo eliminare un giocatore dal listone
     DeletePlayer(name) {
         for (let i = 0; i < this.playersList.length; i++) {
             if (this.playersList[i].GetName() === name) {
@@ -227,37 +241,46 @@ class AdminPage{
                 return;
             }
         }
+
+        // Aggiorno la lista dei giocatori trovati dalla ricerca
+        this.checkSearch();
     }
 
-    // AGGIUNGE UN TEAM A QUELLI PRESENTI
+    // ADDTEAM: chiamata quando un client richiede di partecipare all'asta
     AddTeam(name){
-        var _exist = false;
+        var exist = false;
+
         for(var i = 0; i < this.teams.length; i++){
             if(this.teams[i].GetName() === name){
-                _exist = true;
+                exist = true;
             }
         }
-        if(!_exist){
+
+        if(!exist){
             this.teams.push(new Team(name));
         }
         else{
         }
     }
 
-    // SELECT PLAYER FROM RESEARCH BAR
+    // SELECTPLAYER: chiamata quando seleziono un giocatore dalla barra di ricerca
     SelectPlayer(player){
+        // resetto le variabili dell'asta
         this.currentQuota = 0;
         this.currentPlayer = player.GetName();
         this.currentSquadra = player.GetSquadra();
         this.currentSquadraVincente = "";
         this.player = player;
 
+        // aggiorno il layout per mostrare il giocatore selezionato
         this.ResetDisplay();
 
+        //faccio ripartire il timer
         this.timer.startTimer();
         this.isPlayerAssignable = false;
     }
 
+    // RESETDISPLAY: chiamata quando devo aggiornare il layout dell'asta
     ResetDisplay(){
         this.Crediti.updateText(this.currentQuota);
         this.PlayerName.updateText(this.currentPlayer);
@@ -271,7 +294,7 @@ class AdminPage{
         this.timer.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
     }
 
-    // GENERAZIONE FILE ROSE
+    // GENERATECSV: chiamata quando devo caricare i giocatori dei team sul csv
     GenerateCSV() {
         let csvContent = "";
         
@@ -282,7 +305,7 @@ class AdminPage{
         return csvContent;
     }
 
-    // EXPORT FILE ROSE
+    // DOWNLOADCSV: chiamata quando devo generare il csv file dell'asta
     DownloadCSV(filename = "rose.csv") {
         const csvContent = this.GenerateCSV();
         const blob = new Blob([csvContent], { type: "text/csv" });
@@ -294,7 +317,7 @@ class AdminPage{
         document.body.removeChild(link);
     }
 
-    // ASKING THE XCL FILE
+    // ASKFORFILE: chiamata quando devo caricare il file del listone
     askForFile() {
         const input = document.createElement("input");
         input.type = "file";
@@ -327,11 +350,8 @@ class AdminPage{
     
         input.click();
     }
-
-
-
     
-    // CREAZIONE DEGLI OGGETTI Player
+    // CREATEPLAYERS: chiamata quando devo mappare i dati in una lista con solo le determinate informazioni
     createPlayers(data) {
         return data.map(row => new Player(
             row[0] || 0,    // ID
@@ -341,13 +361,11 @@ class AdminPage{
         ));
     }
     
-    // MOSTRA I DATI NELLA CONSOLE
+    // DEBUG: mostra i dati in console dei giocatori
     displayData(players) {
         console.log("Lista di Giocatori:");
         console.table(players);
     }
-
-
 
     // CHECK SE IL TESTO NELLA BARRA DI RICERCA E' CAMBIATO
     checkSearch(){
