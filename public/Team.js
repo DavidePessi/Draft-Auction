@@ -43,7 +43,9 @@ class Team{
         textStyle(NORMAL)
         textSize(12);
 
-
+        fill(0, 125);
+        rect(15 + offsetX, 16 + offsetY, windowWidth/12, 520, 15); 
+        
         //stampa sfondo
         noStroke();
         if(this.CheckHover()){

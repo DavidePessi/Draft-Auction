@@ -21,12 +21,12 @@ class Button{
 
     show(){
 
-        fill(10);
+        fill(0, 125);
         rect(this.originalX, this.originalY, this.buttonW, this.buttonH, this.roundness);
 
         if(this.checkHover()){
-            stroke(color(255));
-            strokeWeight(1);
+            stroke(color(0));
+            strokeWeight(3);
         }
 
         this.buttonY = lerp(this.buttonY, this.targetY, 0.1);
