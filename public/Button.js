@@ -20,9 +20,13 @@ class Button{
     }
 
     show(){
+
+        fill(10);
+        rect(this.originalX, this.originalY, this.buttonW, this.buttonH, this.roundness);
+
         if(this.checkHover()){
             stroke(color(255));
-            strokeWeight(3);
+            strokeWeight(1);
         }
 
         this.buttonY = lerp(this.buttonY, this.targetY, 0.1);
@@ -30,6 +34,7 @@ class Button{
         fill(194, 252, 159);
         rect(this.buttonX, this.buttonY, this.buttonW, this.buttonH, this.roundness); 
         noStroke();
+        
 
         fill(0);
         textSize(this.textSize);
@@ -39,6 +44,7 @@ class Button{
 
     updateOffsetX(newOffsetX){
         this.buttonX = newOffsetX;
+        this.originalX = newOffsetX;
     }
 
     checkHover() {

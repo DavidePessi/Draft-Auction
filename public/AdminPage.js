@@ -89,7 +89,7 @@ class AdminPage{
         // ESECUZIONE DI FUNZIONI
 
         // aggiorno la ricerca giocatori
-        this.checkSearch();
+        this.checkSearch(false);
         this.showSearchList();
 
         // verifico se il timer è scaduto
@@ -238,12 +238,10 @@ class AdminPage{
         for (let i = 0; i < this.playersList.length; i++) {
             if (this.playersList[i].GetName() === name) {
                 this.playersList.splice(i, 1);
+                this.checkSearch(true);
                 return;
             }
-        }
-
-        // Aggiorno la lista dei giocatori trovati dalla ricerca
-        this.checkSearch();
+        }        
     }
 
     // ADDTEAM: chiamata quando un client richiede di partecipare all'asta
@@ -368,12 +366,13 @@ class AdminPage{
     }
 
     // CHECK SE IL TESTO NELLA BARRA DI RICERCA E' CAMBIATO
-    checkSearch(){
-        if(inputBox.value() === this.previousValueText){}else{
+    checkSearch(inputDoIt){
+        if(inputDoIt || inputBox.value() !== this.previousValueText){
             if(this.playersList != null){
                 this.previousValueText = inputBox.value();
                 this.currentResearchList = this.searchPlayers(this.previousValueText, this.playersList);
                 this.updateSearchList();
+                
             }
         }
     }
