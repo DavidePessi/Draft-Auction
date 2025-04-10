@@ -9,6 +9,9 @@ class ButtonImage{
         this.switch = false;
         this.moveOffset = 5;
 
+        this.targetY = y;
+        this.targetX = x;
+
         this.preload(image, image2);
     }
 
@@ -22,7 +25,7 @@ class ButtonImage{
     }
 
     show(){
-        fill(0, 125);
+        fill(250, 255, 91);
         circle(this.originalX, this.originalY, this.buttonH);
         
         if(this.checkHover()){
@@ -31,8 +34,9 @@ class ButtonImage{
         }
 
         this.buttonY = lerp(this.buttonY, this.targetY, 0.1);
+        this.buttonX = lerp(this.buttonX, this.targetX, 0.1);
 
-        fill(194, 252, 159);
+        fill(173, 255, 122);
         circle(this.buttonX, this.buttonY, this.buttonH);
         noStroke();
         let imgSize = this.buttonH * 0.6;
@@ -63,8 +67,10 @@ class ButtonImage{
 
         if (this.hover) {
             this.targetY = this.originalY - this.moveOffset;
+            this.targetX = this.originalX - this.moveOffset;
         } else {
             this.targetY = this.originalY;
+            this.targetX = this.originalX;
         }
         
         return this.hover;

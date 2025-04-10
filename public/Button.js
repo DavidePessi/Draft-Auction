@@ -17,11 +17,12 @@ class Button{
         textSize(12);
 
         this.targetY = y;
+        this.targetX = x;
     }
 
     show(){
-
-        fill(0, 125);
+        
+        fill(250, 255, 91);
         rect(this.originalX, this.originalY, this.buttonW, this.buttonH, this.roundness);
 
         if(this.checkHover()){
@@ -30,8 +31,9 @@ class Button{
         }
 
         this.buttonY = lerp(this.buttonY, this.targetY, 0.1);
+        this.buttonX = lerp(this.buttonX, this.targetX, 0.1);
 
-        fill(194, 252, 159);
+        fill(173, 255, 122);
         rect(this.buttonX, this.buttonY, this.buttonW, this.buttonH, this.roundness); 
         noStroke();
         
@@ -58,8 +60,10 @@ class Button{
         // Set destination
         if (this.hover) {
             this.targetY = this.originalY - this.moveOffset;
+            this.targetX = this.originalX - this.moveOffset;
         } else {
             this.targetY = this.originalY;
+            this.targetX = this.originalX;
         }
 
         return this.hover;

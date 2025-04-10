@@ -18,7 +18,7 @@ class PlayerSearch{
 
     show(offsetX, offsetY){
         //sfondo
-        fill(194, 252, 159);
+        fill(173, 255, 122);
         if(this.checkHover()){
             fill(220, 255, 175);
         }

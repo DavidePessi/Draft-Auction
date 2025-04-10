@@ -13,7 +13,7 @@ class Timer{
     }
 
     show(){
-        fill(194, 252, 159);
+        fill(173, 255, 122);
         circle(this.circleX, this.circleY, this.circleH);
         noStroke();
 

@@ -9,11 +9,11 @@ class ClientPage{
         this.nomeSquadra = nome;
         this.socket = socket;
 
-        this.buttonPlusOne = new ButtonClient(windowWidth/4, windowWidth/4, "+1", windowWidth/5, color(194, 252, 159));
+        this.buttonPlusOne = new ButtonClient(windowWidth/4, windowWidth/4, "+1", windowWidth/5, color(173, 255, 122));
         this.buttonPlusTwo = new ButtonClient(windowWidth * 3/4, windowWidth/4, "+2", windowWidth/5, color(255));
         this.buttonPlusFive = new ButtonClient(windowWidth/4, windowWidth * 6/8, "+5", windowWidth/5, color(255));
-        this.buttonPlusTen = new ButtonClient(windowWidth * 3/4, windowWidth * 6/8, "+10", windowWidth/5, color(194, 252, 159));
-        this.buttonPlus = new ButtonClient(windowWidth * 3/4 + windowWidth/10, windowWidth * 10/8 - windowWidth/10, "+", windowWidth/10, color(194, 252, 159));
+        this.buttonPlusTen = new ButtonClient(windowWidth * 3/4, windowWidth * 6/8, "+10", windowWidth/5, color(173, 255, 122));
+        this.buttonPlus = new ButtonClient(windowWidth * 3/4 + windowWidth/10, windowWidth * 10/8 - windowWidth/10, "+", windowWidth/10, color(173, 255, 122));
 
 
         inputBox = createInput("");

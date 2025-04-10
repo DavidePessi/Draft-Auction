@@ -26,6 +26,14 @@ class AdminPage{
         inputBox.style("background", "white");
         inputBox.style("padding", "14px");
         inputBox.style("border-radius", "999px");
+        inputBox.style("outline", "none");
+        inputBox.style("box-shadow", "none");
+        inputBox.elt.addEventListener("focus", () => {
+            inputBox.style("box-shadow", "0 0 0 3px black");
+        });
+        inputBox.elt.addEventListener("blur", () => {
+            inputBox.style("box-shadow", "none");
+        });
 
         this.magnifyingIcon = createDiv('<i class="fas fa-search"></i>');
         this.magnifyingIcon.size(20, 20);

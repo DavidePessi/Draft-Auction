@@ -43,7 +43,7 @@ class Team{
         textStyle(NORMAL)
         textSize(12);
 
-        fill(0, 125);
+        fill(0, 150);
         rect(15 + offsetX, 16 + offsetY, windowWidth/12, 520, 15); 
         
         //stampa sfondo
@@ -52,7 +52,7 @@ class Team{
             stroke(color(0));
             strokeWeight(3);
         }
-        fill(192, 252, 159);
+        fill(173, 255, 122);
         rect(10 + offsetX, 11 + offsetY, windowWidth/12, 520, 15); 
 
         noStroke();
