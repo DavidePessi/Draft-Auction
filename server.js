@@ -32,6 +32,7 @@ io.sockets.on('connection', (socket) =>{
     if(data.role === 'admin'){
       if(adminSocket == null){
         adminSocket = socket;
+        socket.role = 'admin';
         console.log('Admin connected: ' + socket.id);
       } else {
         console.log('Admin already connected: ' + socket.id);
@@ -40,6 +41,7 @@ io.sockets.on('connection', (socket) =>{
     //CLIENT
     } else if(data.role === 'client'){
       clientsSockets[socket.id] = socket;
+      clientsSockets[socket.id].role = 'client';
       console.log('Client connected: ' + socket.id);
       
       //notify admin if exist
@@ -62,11 +64,6 @@ io.sockets.on('connection', (socket) =>{
     } else if (socket.role === 'client') {
       delete clientsSockets[socket.id];
       console.log('Client removed: ' + socket.id);
-
-      // Optionally notify admin that a client disconnected
-      if (adminSocket) {
-        adminSocket.emit('client_disconnected', {clientId: socket.id});
-      }
     }
   });
 });

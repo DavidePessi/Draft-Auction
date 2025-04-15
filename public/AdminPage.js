@@ -56,7 +56,8 @@ class AdminPage{
         // DEFINISCO I PULSANTI
         this.CSVButton = new Button(windowWidth - 300 - 170 - this.marginLeftButtons, windowHeight/40, 50, "importa listone", 20, 30);
         this.DownloadButton = new Button(windowWidth - 300 - 170 - 147 - 2 * this.marginLeftButtons, windowHeight/40, 50, "scarica rose", 20, 30);
-        this.Pause = new ButtonImage(windowWidth - 300 - 170 - 147 - 25 -  3 * this.marginLeftButtons, windowHeight/40 + 25, 50, './images/pause.png', './images/resume.png');
+        this.CaricaAstaButton = new Button(windowWidth - 300 - 170 - 147 - 153 - 3 * this.marginLeftButtons, windowHeight/40, 50, "riprendi asta", 20, 30);
+        this.Pause = new ButtonImage(windowWidth - 300 - 170 - 147 - 153 - 25 -  4 * this.marginLeftButtons, windowHeight/40 + 25, 50, './images/pause.png', './images/resume.png');
         this.Assegna = new ButtonImage(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth(), windowHeight/20 + this.PlayerName.GetHeight() + 70, 100, './images/martello.png', null);
         
 
@@ -77,6 +78,7 @@ class AdminPage{
         // stampo i bottoni
         this.CSVButton.show();
         this.DownloadButton.show();
+        this.CaricaAstaButton.show();
         this.Pause.show();
 
         if(this.isPlayerAssignable){
@@ -117,7 +119,8 @@ class AdminPage{
         this.magnifyingIcon.position(windowWidth - 100, windowHeight / 40 + 15);
         this.CSVButton.updateOffsetX(windowWidth - 300 - 170 - this.marginLeftButtons);
         this.DownloadButton.updateOffsetX(windowWidth - 300 - 170 - 147 - 2 * this.marginLeftButtons);
-        this.Pause.updateOffsetX(windowWidth - 300 - 170 - 147 - 25 -  3 * this.marginLeftButtons);
+        this.CaricaAstaButton.updateOffsetX(windowWidth - 300 - 170 - 147 - 153 - 25 -  4 * this.marginLeftButtons);
+        this.Pause.updateOffsetX(windowWidth - 300 - 170 - 147 - 153 - 25 -  3 * this.marginLeftButtons);
 
         this.PlayerName.updateOffsetX(windowWidth/4);
         this.Squadra.updateOffsetX(windowWidth/4 + this.PlayerName.GetWidth() + 20);
@@ -152,8 +155,14 @@ class AdminPage{
                 this.DownloadCSV();
             }
 
+            // check if riprendi asta is being pressed
+            if(this.CaricaAstaButton.hover){
+                this.AskFileAsta();
+            }
+
             // check if Pause is being pressed
-            if(this.Pause.hover && this.isPlayerAssignable === false && this.currentPlayer !== ""){
+            if(this.Pause.hover){
+                
                 if(this.timer.isPaused){
                     this.timer.resumeTimer();
                     this.Pause.switchImage();
@@ -239,6 +248,74 @@ class AdminPage{
                 }
             }
         }        
+    }
+
+    // ASKFORASTA: chiamata per chiedere il file di asta da cui partire
+    AskFileAsta(){
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = ".csv";
+
+        input.addEventListener("change", (event) => {
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const text = event.target.result;
+                    const lines = text.split("\n").map(line => line.trim()).filter(line => line.length > 0);
+
+                    // Ignora prime 2 righe
+                    const data = lines.slice(2);
+
+                    const listaGiocatori = [];
+                    const listaTeams = [];
+                    const listaPrezzi = [];
+
+                    data.forEach(line => {
+                        const cells = line.split(",");
+
+                        if (cells.length >= 3) {
+                            listaTeams.push(cells[0].trim());
+                            listaGiocatori.push(cells[1].trim());
+                            listaPrezzi.push(parseFloat(cells[2].trim()));
+                        }
+                    });
+                    console.log(listaGiocatori);
+                    console.log(listaTeams);
+                    console.log(listaPrezzi);
+                    this.LoadAsta(listaTeams, listaGiocatori, listaPrezzi);
+                };
+
+                reader.readAsText(file);
+            } else {
+                alert("Nessun file selezionato.");
+            }
+        });
+
+        input.click();
+    }
+
+    // LOADASTA: chiamata quando devo assegnare i giocatori di un'asta precedentemente iniziata
+    LoadAsta(listaTeams, listaGiocatori, listaPrezzi){
+        if(this.playersList != null){
+            for(var i = 0; i < listaGiocatori.length; i++){
+                for(var k = 0; k < this.playersList.length; k++){
+                    console.log("players: " + this.playersList[k].ID + " " + listaGiocatori[i]);
+                    if(this.playersList[k].ID == listaGiocatori[i]){
+                        
+                        for(var j = 0; j < this.teams.length; j++){
+                            if(listaTeams[i] === this.teams[j].name){
+                                console.log("ok 2: " + listaTeams[i]);
+                                this.playersList[k].SetCosto(listaPrezzi[i]);
+                                this.teams[j].AddPlayer(this.playersList[k]);
+                                this.DeletePlayer(this.playersList[k].name);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     // DELETEPLAYER: chiamata quando devo eliminare un giocatore dal listone

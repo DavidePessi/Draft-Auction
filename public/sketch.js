@@ -15,7 +15,7 @@ var previousTouchClient = false;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    socket = io.connect('http://172.20.10.2:3000');
+    socket = io.connect('http://localhost:3000');
 
     this.inputBox = createInput("");
     //initializing buttons
