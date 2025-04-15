@@ -20,7 +20,7 @@ class ButtonClient{
             fill(220, 255, 175);
         }
         noStroke();
-        circle(this.buttonX, this.buttonY, this.buttonRadius * 2);
+        circle(this.buttonX, this.buttonY, this.buttonRadius * 0.8 * 2);
 
         fill(0);
         textSize(this.textSize);
