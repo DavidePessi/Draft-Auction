@@ -119,8 +119,8 @@ class AdminPage{
         this.magnifyingIcon.position(windowWidth - 100, windowHeight / 40 + 15);
         this.CSVButton.updateOffsetX(windowWidth - 300 - 170 - this.marginLeftButtons);
         this.DownloadButton.updateOffsetX(windowWidth - 300 - 170 - 147 - 2 * this.marginLeftButtons);
-        this.CaricaAstaButton.updateOffsetX(windowWidth - 300 - 170 - 147 - 153 - 25 -  4 * this.marginLeftButtons);
-        this.Pause.updateOffsetX(windowWidth - 300 - 170 - 147 - 153 - 25 -  3 * this.marginLeftButtons);
+        this.CaricaAstaButton.updateOffsetX(windowWidth - 300 - 170 - 147 - 153 - 3 * this.marginLeftButtons);
+        this.Pause.updateOffsetX(windowWidth - 300 - 170 - 147 - 153 - 25 -  4 * this.marginLeftButtons);
 
         this.PlayerName.updateOffsetX(windowWidth/4);
         this.Squadra.updateOffsetX(windowWidth/4 + this.PlayerName.GetWidth() + 20);
