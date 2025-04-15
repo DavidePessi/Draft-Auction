@@ -67,7 +67,7 @@ class AdminPage{
     // SHOW: chiamata ogni fram
     show(){
         // STAMPA
-        background(59);
+        background(37, 48, 49);
 
         // stampo il timer
         if(!this.isPlayerAssignable){

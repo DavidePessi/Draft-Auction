@@ -69,6 +69,23 @@ class Button{
         return this.hover;
     }
 
+    resize(x, y, h, sizeText){
+        this.originalX = x;
+        this.originalY = y;
+        this.buttonX = x;
+        this.buttonY = y;
+        this.buttonH = h;
+        this.textSize = sizeText;
+
+        //DEFINISCO LA LUNGHEZZA DEL BOTTONE IN BASE AL TESTO
+        textSize(sizeText);
+        this.buttonW = 40 + textWidth(this.text);
+        textSize(12);
+
+        this.targetY = y;
+        this.targetX = x;
+    }
+
     isMobile() {
         return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     } 

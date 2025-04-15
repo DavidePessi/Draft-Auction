@@ -40,7 +40,14 @@ class ButtonClient{
     isMobile() {
         return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     }     
-}
+
+    resize(x, y, buttonRadius){
+        this.buttonX = x;
+        this.buttonY = y;
+        this.buttonRadius = buttonRadius;
+        this.updateSize();
+    }
+}  
 
 // Global event handlers for touch
 function touchStarted() {

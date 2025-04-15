@@ -15,9 +15,9 @@ var previousTouchClient = false;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    socket = io.connect('http://localhost:3000');
+    socket = io.connect('http://172.20.10.2:3000');
 
-    inputBox = createInput("");
+    this.inputBox = createInput("");
     //initializing buttons
     if(isMobile()){
         textSize(0.06 * windowWidth);
@@ -27,51 +27,36 @@ function setup() {
         this.AdminButton = new Button(windowWidth/2 + margin/2, windowHeight * 9/24, 100, "Admin", 0.8 * windowWidth/10, 100);
         this.ClientButton = new Button(windowWidth/2 - windowWidth * 4/10 + 55, windowHeight * 9/24, 100, "Client", 0.8 * windowWidth/10, 100);
 
-        inputBox.position(windowWidth/2 - windowWidth * 4/10, windowWidth/3);
-        inputBox.size(windowWidth * 4/5, windowWidth/5);
-        inputBox.style("font-size", 0.8 * windowWidth/10 + "px");
-        inputBox.style("font-family", "Outfit");
-        inputBox.style("font-weight", "500");
-        inputBox.style("border", "none");
-        inputBox.style("background", "white");
-        inputBox.style("padding", "14px");
-        inputBox.style("border-radius", "999px");
-        inputBox.style("outline", "none");
-        inputBox.style("box-shadow", "none");
-        inputBox.elt.addEventListener("focus", () => {
-            inputBox.style("box-shadow", "0 0 0 3px black");
-        });
-        inputBox.elt.addEventListener("blur", () => {
-            inputBox.style("box-shadow", "none");
-        });
+        this.inputBox.position(windowWidth/2 - windowWidth * 4/10, windowWidth/3);
+        this.inputBox.size(windowWidth * 4/5, windowWidth/5);
+        this.inputBox.style("font-size", 0.8 * windowWidth/10 + "px");
     } else{
         textSize(0.03 * windowWidth);
         var margin = textWidth("Admin") + 40;
         textSize(12);
 
-        this.AdminButton = new Button(windowWidth - margin - 500, windowHeight * 0.25, 100, "Admin", 0.03 * windowWidth, 100);
-        this.ClientButton = new Button(500, windowHeight * 0.25, 100, "Client", 0.03 * windowWidth, 100); 
+        this.AdminButton = new Button(windowWidth - margin - windowWidth/3, windowHeight * 0.25, windowWidth/20, "Admin", 0.03 * windowWidth, 100);
+        this.ClientButton = new Button(windowWidth/3, windowHeight * 0.25, windowWidth/20, "Client", 0.03 * windowWidth, 100); 
 
-        inputBox.position(windowWidth/2 - windowWidth / 5, windowWidth/4);
-        inputBox.size(windowWidth * 2/5, 100);
-        inputBox.style("font-size", 0.06 * windowWidth + "px");
-        inputBox.style("font-family", "Outfit");
-        inputBox.style("font-weight", "500");
-        inputBox.style("border", "none");
-        inputBox.style("background", "white");
-        inputBox.style("padding", "14px");
-        inputBox.style("border-radius", "999px");
-        inputBox.style("outline", "none");
-        inputBox.style("box-shadow", "none");
-        inputBox.elt.addEventListener("focus", () => {
-            inputBox.style("box-shadow", "0 0 0 3px black");
-        });
-        inputBox.elt.addEventListener("blur", () => {
-            inputBox.style("box-shadow", "none");
-        });
+        this.inputBox.position(windowWidth/2 - windowWidth / 5, windowWidth/4);
+        this.inputBox.size(windowWidth * 2/5, windowWidth/20);
+        this.inputBox.style("font-size", 0.06 * windowWidth + "px");
     }
 
-    
+    this.inputBox.style("font-family", "Outfit");
+    this.inputBox.style("font-weight", "500");
+    this.inputBox.style("border", "none");
+    this.inputBox.style("background", "white");
+    this.inputBox.style("padding", "14px");
+    this.inputBox.style("border-radius", "999px");
+    this.inputBox.style("outline", "none");
+    this.inputBox.style("box-shadow", "none");
+    this.inputBox.elt.addEventListener("focus", () => {
+        this.inputBox.style("box-shadow", "0 0 0 3px black");
+    });
+    this.inputBox.elt.addEventListener("blur", () => {
+        this.inputBox.style("box-shadow", "none");
+    });
         
 
     //------------------------------------------------------ MESSAGES ---------------------------------------------------------//
@@ -106,7 +91,7 @@ function draw() {
 
 //HOME DRAW
 function showHomeScreen(){
-    background(59);
+    background(37, 48, 49);
 
     fill(255);
     textStyle(NORMAL);
@@ -130,6 +115,21 @@ function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
     if(currentScreen === "admin"){
         page.Resize();
+    } else if(currentScreen === "client"){
+        page.Resize();
+    } else {
+        if(!isMobile()){
+            textSize(0.03 * windowWidth);
+            var margin = textWidth("Admin") + 40;
+            textSize(12);
+
+            this.AdminButton.resize(windowWidth - margin - windowWidth/3, windowHeight * 0.25, windowWidth/20, 0.03 * windowWidth);
+            this.ClientButton.resize(windowWidth/3, windowHeight * 0.25, windowWidth/20, 0.03 * windowWidth); 
+
+            this.inputBox.position(windowWidth/2 - windowWidth / 5, windowWidth/4);
+            this.inputBox.size(windowWidth * 2/5, windowWidth/20);
+            this.inputBox.style("font-size", 0.06 * windowWidth + "px");
+        }
     }
 }
 

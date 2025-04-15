@@ -30,8 +30,12 @@ io.sockets.on('connection', (socket) =>{
     
     //ADMIN
     if(data.role === 'admin'){
-      adminSocket = socket;
-      console.log('Admin connected: ' + socket.id);
+      if(adminSocket == null){
+        adminSocket = socket;
+        console.log('Admin connected: ' + socket.id);
+      } else {
+        console.log('Admin already connected: ' + socket.id);
+      }
     
     //CLIENT
     } else if(data.role === 'client'){
@@ -48,4 +52,21 @@ io.sockets.on('connection', (socket) =>{
   socket.on('plus_quota', (data) =>{
     adminSocket.emit('plus_quota', {value: data.value, name: data.name});
   })
+
+  socket.on('disconnect', () => {
+    console.log('Socket disconnected: ' + socket.id);
+
+    if (socket.role === 'admin') {
+      console.log('Admin has disconnected');
+      adminSocket = null;
+    } else if (socket.role === 'client') {
+      delete clientsSockets[socket.id];
+      console.log('Client removed: ' + socket.id);
+
+      // Optionally notify admin that a client disconnected
+      if (adminSocket) {
+        adminSocket.emit('client_disconnected', {clientId: socket.id});
+      }
+    }
+  });
 });

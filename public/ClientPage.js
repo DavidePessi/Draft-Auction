@@ -9,7 +9,7 @@ class ClientPage{
         this.nomeSquadra = nome;
         this.socket = socket;
 
-        inputBox = createInput("");
+        this.inputBox = createInput("");
 
         if(isMobile()){
 
@@ -19,16 +19,9 @@ class ClientPage{
             this.buttonPlusTen = new ButtonClient(windowWidth * 3/4, windowWidth * 6/8, "+10", windowWidth/5, color(173, 255, 122));
             this.buttonPlus = new ButtonClient(windowWidth * 3/4 + windowWidth/10, windowWidth * 10/8 - windowWidth/10, "+", windowWidth/10, color(173, 255, 122));
 
-
-            
-            inputBox.position(windowWidth/4 - windowWidth/5, windowWidth * 10/8 - windowWidth/5);
-            inputBox.size(windowWidth * 3/5, windowWidth/5);
-            inputBox.style("font-size", 0.8 * windowWidth/10 + "px");
-            inputBox.attribute('type', 'number');
-            inputBox.style("border", "none");
-            inputBox.style("background", "white");
-            inputBox.style("padding", "14px");
-            inputBox.style("border-radius", "999px");
+            this.inputBox.position(windowWidth/4 - windowWidth/5, windowWidth * 10/8 - windowWidth/5);
+            this.inputBox.size(windowWidth * 3/5, windowWidth/5);
+            this.inputBox.style("font-size", 0.8 * windowWidth/10 + "px");
 
         } else{
 
@@ -38,17 +31,16 @@ class ClientPage{
             this.buttonPlusTen = new ButtonClient(windowWidth/4 + 10, windowWidth/5 + 0.12 * windowWidth + 10, "+10", 0.06 * windowWidth, color(173, 255, 122));
             this.buttonPlus = new ButtonClient(windowWidth/4 + 10, windowWidth/5 + 0.21 * windowWidth + 10, "+", 0.03 * windowWidth, color(173, 255, 122));
 
-
-            inputBox.position(windowWidth/4 - 0.16 * windowWidth - 10, windowWidth/5 + 0.185 * windowWidth + 10);
-            inputBox.size(0.03 * windowWidth * 4, 0.03 * windowWidth * 2 * 0.5);
-            inputBox.style("font-size", 0.03 * windowWidth + "px");
-            inputBox.attribute('type', 'number');
-            inputBox.style("border", "none");
-            inputBox.style("background", "white");
-            inputBox.style("padding", "14px");
-            inputBox.style("border-radius", "999px");
-
+            this.inputBox.position(windowWidth/4 - 0.16 * windowWidth - 10, windowWidth/5 + 0.185 * windowWidth + 10);
+            this.inputBox.size(0.03 * windowWidth * 4, 0.03 * windowWidth * 2 * 0.5);
+            this.inputBox.style("font-size", 0.03 * windowWidth + "px");
         }
+
+        this.inputBox.attribute('type', 'number');
+        this.inputBox.style("border", "none");
+        this.inputBox.style("background", "white");
+        this.inputBox.style("padding", "14px");
+        this.inputBox.style("border-radius", "999px");
 
         inputBox.input(function() {
             let value = inputBox.value();
@@ -60,13 +52,13 @@ class ClientPage{
     }
 
     show(){
-        background(59);
+        background(37, 48, 49);
 
         if(!isMobile()){
             textSize(0.07 * windowWidth);
             var margin = textWidth(this.nomeSquadra);
             fill(255);
-            text(this.nomeSquadra, windowWidth/2, windowHeight/20 + 80);
+            text(this.nomeSquadra, windowWidth/2, windowHeight/10);
             textSize(12);
         }
 
@@ -111,5 +103,17 @@ class ClientPage{
     
 
     //RESIZE
-    Resize(){}
+    Resize(){
+        if(!isMobile()){
+            this.buttonPlusOne.resize(windowWidth/4 - 0.12 * windowWidth - 10, windowWidth/5, 0.06 * windowWidth);
+            this.buttonPlusTwo.resize(windowWidth/4 + 10, windowWidth/5, 0.06 * windowWidth);
+            this.buttonPlusFive.resize(windowWidth/4 - 0.12 * windowWidth - 10, windowWidth/5 + 0.12 * windowWidth + 10, 0.06 * windowWidth);
+            this.buttonPlusTen.resize(windowWidth/4 + 10, windowWidth/5 + 0.12 * windowWidth + 10, 0.06 * windowWidth);
+            this.buttonPlus.resize(windowWidth/4 + 10, windowWidth/5 + 0.21 * windowWidth + 10, 0.03 * windowWidth);
+
+            this.inputBox.position(windowWidth/4 - 0.16 * windowWidth - 10, windowWidth/5 + 0.185 * windowWidth + 10);
+            this.inputBox.size(0.03 * windowWidth * 4, 0.03 * windowWidth * 2 * 0.5);
+            this.inputBox.style("font-size", 0.03 * windowWidth + "px");
+        }
+    }
 }
