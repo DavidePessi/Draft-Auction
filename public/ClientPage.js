@@ -72,28 +72,52 @@ class ClientPage{
     }
 
     checkTouch(){
-        if(previousTouchOne === false && this.buttonPlusOne.hover === true){
-            this.plusQuota(1);
-        }else if(previousTouchTwo === false && this.buttonPlusTwo.hover === true){
-            this.plusQuota(2);
-        }else if(previousTouchFive === false && this.buttonPlusFive.hover === true){
-            this.plusQuota(5);
-        }else if(previousTouchTen === false && this.buttonPlusTen.hover === true){
-            this.plusQuota(10);
-        }else if(previousTouchPlus === false && this.buttonPlus.hover === true){
-            if (inputBox.value() !== "" && inputBox.value() !== null) {
-                let inputValue = parseInt(inputBox.value(), 10);
-                if (!isNaN(inputValue)) {
-                    this.plusQuota(inputValue);
+        if(isMobile()){
+            if(previousTouchOne === false && this.buttonPlusOne.hover === true){
+                this.plusQuota(1);
+            }else if(previousTouchTwo === false && this.buttonPlusTwo.hover === true){
+                this.plusQuota(2);
+            }else if(previousTouchFive === false && this.buttonPlusFive.hover === true){
+                this.plusQuota(5);
+            }else if(previousTouchTen === false && this.buttonPlusTen.hover === true){
+                this.plusQuota(10);
+            }else if(previousTouchPlus === false && this.buttonPlus.hover === true){
+                if (inputBox.value() !== "" && inputBox.value() !== null) {
+                    let inputValue = parseInt(inputBox.value(), 10);
+                    if (!isNaN(inputValue)) {
+                        this.plusQuota(inputValue);
+                    }
+                }
+            }
+
+            previousTouchOne = this.buttonPlusOne.hover;
+            previousTouchTwo = this.buttonPlusTwo.hover;
+            previousTouchFive = this.buttonPlusFive.hover;
+            previousTouchTen = this.buttonPlusTen.hover;
+            previousTouchPlus = this.buttonPlus.hover;
+
+        }
+    }
+
+    mousePressed(){
+        if(!isMobile()){
+            if(this.buttonPlusOne.hover === true){
+                this.plusQuota(1);
+            }else if(this.buttonPlusTwo.hover === true){
+                this.plusQuota(2);
+            }else if(this.buttonPlusFive.hover === true){
+                this.plusQuota(5);
+            }else if(this.buttonPlusTen.hover === true){
+                this.plusQuota(10);
+            }else if(this.buttonPlus.hover === true){
+                if (inputBox.value() !== "" && inputBox.value() !== null) {
+                    let inputValue = parseInt(inputBox.value(), 10);
+                    if (!isNaN(inputValue)) {
+                        this.plusQuota(inputValue);
+                    }
                 }
             }
         }
-
-        previousTouchOne = this.buttonPlusOne.hover;
-        previousTouchTwo = this.buttonPlusTwo.hover;
-        previousTouchFive = this.buttonPlusFive.hover;
-        previousTouchTen = this.buttonPlusTen.hover;
-        previousTouchPlus = this.buttonPlus.hover;
     }
 
     //send a plus one 
