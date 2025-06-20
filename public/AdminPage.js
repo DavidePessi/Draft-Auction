@@ -48,21 +48,21 @@ class AdminPage{
         this.teams = [];
 
         // DEFINISCO I TESTI
-        this.PlayerName = new Medallion(windowWidth/4, windowHeight/20, 100, this.currentPlayer, 64);
-        this.Squadra = new Medallion(windowWidth/4 + this.PlayerName.GetWidth() + 20, windowHeight/20, 100, this.currentSquadra, 64);
-        this.Crediti = new Medallion(windowWidth/4, windowHeight/20 + this.PlayerName.GetHeight() + 20, 100, this.currentQuota, 64);
-        this.SquadraVincente = new Medallion(windowWidth/4 + this.Crediti.GetWidth() + 20, windowHeight/20 + this.PlayerName.GetHeight() + 20, 100, this.currentSquadraVincente, 64);
+        this.PlayerName = new Medallion(windowWidth/8, windowHeight/40, 100, this.currentPlayer, 64);
+        this.Squadra = new Medallion(windowWidth/8 + this.PlayerName.GetWidth() + 20, windowHeight/40, 100, this.currentSquadra, 64);
+        this.Crediti = new Medallion(windowWidth/8, windowHeight/40 + this.PlayerName.GetHeight() + 20, 100, this.currentQuota, 64);
+        this.SquadraVincente = new Medallion(windowWidth/8 + this.Crediti.GetWidth() + 20, windowHeight/40 + this.PlayerName.GetHeight() + 20, 100, this.currentSquadraVincente, 64);
 
         // DEFINISCO I PULSANTI
         this.CSVButton = new Button(windowWidth - 300 - 170 - this.marginLeftButtons, windowHeight/40, 50, "importa listone", 20, 30);
         this.DownloadButton = new Button(windowWidth - 300 - 170 - 147 - 2 * this.marginLeftButtons, windowHeight/40, 50, "scarica rose", 20, 30);
         this.CaricaAstaButton = new Button(windowWidth - 300 - 170 - 147 - 153 - 3 * this.marginLeftButtons, windowHeight/40, 50, "riprendi asta", 20, 30);
         this.Pause = new ButtonImage(windowWidth - 300 - 170 - 147 - 153 - 25 -  4 * this.marginLeftButtons, windowHeight/40 + 25, 50, './images/pause.png', './images/resume.png');
-        this.Assegna = new ButtonImage(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth(), windowHeight/20 + this.PlayerName.GetHeight() + 70, 100, './images/martello.png', null);
+        this.Assegna = new ButtonImage(windowWidth/8 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth(), windowHeight/40 + this.PlayerName.GetHeight() + 70, 100, './images/martello.png', null);
         
 
         // DEFINISCO IL TIMER
-        this.timer = new Timer(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth(), windowHeight/20 + this.PlayerName.GetHeight() + 70, 100, 64);
+        this.timer = new Timer(windowWidth/8 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth(), windowHeight/40 + this.PlayerName.GetHeight() + 70, 100, 64);
     }
 
     // SHOW: chiamata ogni fram
@@ -122,13 +122,13 @@ class AdminPage{
         this.CaricaAstaButton.updateOffsetX(windowWidth - 300 - 170 - 147 - 153 - 3 * this.marginLeftButtons);
         this.Pause.updateOffsetX(windowWidth - 300 - 170 - 147 - 153 - 25 -  4 * this.marginLeftButtons);
 
-        this.PlayerName.updateOffsetX(windowWidth/4);
-        this.Squadra.updateOffsetX(windowWidth/4 + this.PlayerName.GetWidth() + 20);
-        this.Crediti.updateOffsetX(windowWidth/4, windowHeight/20 + this.PlayerName.GetHeight() + 20);
-        this.SquadraVincente.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 20, windowHeight/20 + this.PlayerName.GetHeight() + 20);
+        this.PlayerName.updateOffsetX(windowWidth/8);
+        this.Squadra.updateOffsetX(windowWidth/8 + this.PlayerName.GetWidth() + 20);
+        this.Crediti.updateOffsetX(windowWidth/8, windowHeight/40 + this.PlayerName.GetHeight() + 20);
+        this.SquadraVincente.updateOffsetX(windowWidth/8 + this.Crediti.GetWidth() + 20, windowHeight/40 + this.PlayerName.GetHeight() + 20);
 
-        this.Assegna.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
-        this.timer.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
+        this.Assegna.updateOffsetX(windowWidth/8 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
+        this.timer.updateOffsetX(windowWidth/8 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
     }
 
     // MOUSE PRESSED: chiamata quando viene fatto click con il tasto sinistro del mouse
@@ -214,9 +214,9 @@ class AdminPage{
                     this.Crediti.updateText(this.currentQuota);
                     this.Crediti.updateWidth();
                     
-                    this.SquadraVincente.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 20);
-                    this.Assegna.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
-                    this.timer.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
+                    this.SquadraVincente.updateOffsetX(windowWidth/8 + this.Crediti.GetWidth() + 20);
+                    this.Assegna.updateOffsetX(windowWidth/8 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
+                    this.timer.updateOffsetX(windowWidth/8 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
 
                     // resetto il timer
                     this.timer.startTimer();
@@ -370,11 +370,11 @@ class AdminPage{
         this.Squadra.updateText(this.currentSquadra);
         this.SquadraVincente.updateText(this.currentSquadraVincente);
 
-        this.Squadra.updateOffsetX(windowWidth/4 + this.PlayerName.GetWidth() + 20)
+        this.Squadra.updateOffsetX(windowWidth/8 + this.PlayerName.GetWidth() + 20)
         this.SquadraVincente.updateWidth();
-        this.SquadraVincente.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 20);
-        this.Assegna.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
-        this.timer.updateOffsetX(windowWidth/4 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
+        this.SquadraVincente.updateOffsetX(windowWidth/8 + this.Crediti.GetWidth() + 20);
+        this.Assegna.updateOffsetX(windowWidth/8 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
+        this.timer.updateOffsetX(windowWidth/8 + this.Crediti.GetWidth() + 90 + this.SquadraVincente.GetWidth());
     }
 
     // GENERATECSV: chiamata quando devo caricare i giocatori dei team sul csv
