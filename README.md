@@ -27,10 +27,6 @@ socket = io.connect('http://IP_DEVICE:3000');
 
 where `IP_DEVICE` is the IP address retrieved before.
 
-With this change you can open a command line on the device that will run as server go to the directory where server.js is and use the command:
-```
-node server.js
-```
 In order to connect search on a browser: `http://IP_DEVICE:3000` and connect as admin or client.
 
 ## Resume previous draft
