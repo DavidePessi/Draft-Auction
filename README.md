@@ -7,7 +7,14 @@ The application allow you to:
 - Export a draft and resume the draft whenever you want.
 
 ## How to set up
-
+download Node and clone the repo, then from a command line inside the project folder:
+```
+npm install
+```
+```
+npm start
+```
+And the server should be running on the device.
 
 ## How to use
 before starting the server make sure all the devices are connected to the same wi fi and retrieve the IP address of the device on which the server will run.
