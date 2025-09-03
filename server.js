@@ -12,7 +12,6 @@ app.use(express.static('public'));
 //PRIVATE VARIABLES
 var adminSocket = null;
 var clientsSockets = {}
-var lockTimer = false;
 
 //specifying the socket
 var io = socket(server, {
@@ -53,17 +52,15 @@ io.sockets.on('connection', (socket) =>{
   });
 
   socket.on('plus_quota', (data) =>{
-    if(lockTimer){
-      return;
-    }
-    lockTimer = true;
-
     adminSocket.emit('plus_quota', {value: data.value, name: data.name});
+<<<<<<< HEAD
 
     setTimeout(() => {
       lockTimer = false;
     }, 1000);
 
+=======
+>>>>>>> parent of 137bb41 (added a timer for synchronization between clients)
   })
 
   socket.on('disconnect', () => {
