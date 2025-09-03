@@ -62,7 +62,7 @@ io.sockets.on('connection', (socket) =>{
 
     setTimeout(() => {
       lockTimer = false;
-    }, 500);
+    }, 1000);
 
   })
 
